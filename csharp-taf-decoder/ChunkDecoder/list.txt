@@ -1,0 +1,10 @@
+Abstract
+CloudChunkDecoder.cs
+DatetimeChunkDecoder.cs
+EvolutionChunkDecoder.cs
+IcaoChunkDecoder.cs
+list.txt
+ReportTypeChunkDecoder.cs
+SurfaceWindChunkDecoder.cs
+TemperatureChunkDecoder.cs
+VisibilityChunkDecoder.cs
