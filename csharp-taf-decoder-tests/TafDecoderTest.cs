@@ -39,8 +39,7 @@ public class TafDecoderTest
         Assert.Null(surfaceWind.SpeedVariations);
 
         var visibility = decoderTaf.Visibility;
-        //TODO: Fix
-        //Assert.AreEqual(6, visibility.ActualVisibility.ActualValue);
+        Assert.AreEqual(6, visibility.ActualVisibility.ActualValue);
         Assert.AreEqual(Value.Unit.StatuteMile, visibility.ActualVisibility.ActualUnit);
         Assert.True(visibility.Greater);
 
@@ -100,8 +99,7 @@ public class TafDecoderTest
         Assert.Null(surfaceWind.SpeedVariations);
 
         var visibility = decoderTaf.Visibility;
-        //TODO: Fix
-        //Assert.AreEqual(6, visibility.ActualVisibility.ActualValue);
+        Assert.AreEqual(6, visibility.ActualVisibility.ActualValue);
         Assert.AreEqual(Value.Unit.StatuteMile, visibility.ActualVisibility.ActualUnit);
         Assert.True(visibility.Greater);
 

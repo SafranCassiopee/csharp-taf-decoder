@@ -58,15 +58,14 @@ namespace csharp_taf_decoder.chunkdecoder
                 else
                 {
                     // us visibility
-                    var main = Convert.ToInt32(found[4].Value);
+                    var main = Convert.ToDouble(found[4].Value);
                     var isGreater = found[3].Value == "P";
 
                     int fractionTop;
                     int fractionBottom;
-                    var visibilityValue = 0d;
+                    var visibilityValue = main;
                     if (int.TryParse(found[6].Value, out fractionTop) && int.TryParse(found[7].Value, out fractionBottom))
                     {
-
                         if (fractionBottom != 0)
                         {
                             visibilityValue = (double)main + fractionTop / fractionBottom;
@@ -75,7 +74,6 @@ namespace csharp_taf_decoder.chunkdecoder
                         {
                             visibilityValue = main;
                         }
-
                     }
                     visibility.ActualVisibility = new Value(visibilityValue, Value.Unit.StatuteMile);
                     visibility.Greater = isGreater;
