@@ -1,2 +1,2 @@
 # csharp-taf-decoder
-TAF forecast observation decoder written in C#.
+TAF weather forecast decoder written in C#.
