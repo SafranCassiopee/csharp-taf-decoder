@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="BasicTest.cs" />
     <Compile Include="ChunkDecoder\CloudChunkDecoderTest.cs" />
+    <Compile Include="ChunkDecoder\DatetimeChunkDecoderTest.cs" />
     <Compile Include="TafDecoderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueTest.cs" />

@@ -11,33 +11,33 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
     [TestFixture, Category("CloudChunkDecoder")]
     public class CloudChunkDecoderTest
     {
-        private readonly CloudChunkDecoder chunkDecoder = new CloudChunkDecoder();
+        private static readonly CloudChunkDecoder chunkDecoder = new CloudChunkDecoder();
 
         /// <summary>
         /// Test parsing of valid cloud chunks
         /// </summary>
         [Test, TestCaseSource("ValidChunks")]
-        public void TestParse(Tuple<string, int, CloudAmount, int?, CloudType, string> validChunk)
+        public static void TestParse(Tuple<string, int, CloudAmount, int?, CloudType, string> chunk)
         {
-            var decoded = chunkDecoder.Parse(validChunk.Item1);
+            var decoded = chunkDecoder.Parse(chunk.Item1);
             var clouds = (decoded[TafDecoder.ResultKey] as Dictionary<string, object>)[CloudChunkDecoder.CloudsParameterName] as List<CloudLayer>;
-            Assert.AreEqual(validChunk.Item2, clouds.Count);
+            Assert.AreEqual(chunk.Item2, clouds.Count);
             if (clouds.Count > 0)
             {
                 var cloud = clouds[0];
-                Assert.AreEqual(validChunk.Item3, cloud.Amount);
-                if (validChunk.Item4.HasValue)
+                Assert.AreEqual(chunk.Item3, cloud.Amount);
+                if (chunk.Item4.HasValue)
                 {
-                    Assert.AreEqual(validChunk.Item4, cloud.BaseHeight.ActualValue);
+                    Assert.AreEqual(chunk.Item4, cloud.BaseHeight.ActualValue);
                     Assert.AreEqual(Value.Unit.Feet, cloud.BaseHeight.ActualUnit);
                 }
                 else
                 {
                     Assert.IsNull(cloud.BaseHeight);
                 }
-                Assert.AreEqual(validChunk.Item5, cloud.Type);
+                Assert.AreEqual(chunk.Item5, cloud.Type);
             }
-            Assert.AreEqual(validChunk.Item6, decoded[TafDecoder.RemainingTafKey]);
+            Assert.AreEqual(chunk.Item6, decoded[TafDecoder.RemainingTafKey]);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         /// </summary>
         /// <param name="chunk"></param>
         [Test, TestCaseSource("InvalidChunks")]
-        public void TestParseCAVOKChunk(string chunk)
+        public static void TestParseCAVOKChunk(string chunk)
         {
             Dictionary<string, object> decoded = null;
             Assert.DoesNotThrow(() =>
@@ -57,17 +57,18 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         }
 
         /// <summary>
-        ///  Test parsing of invalid cloud chunks
+        /// Test parsing of invalid cloud chunks
         /// </summary>
         /// <param name="chunk"></param>
         [Test, TestCaseSource("InvalidChunks")]
-        public void TestParseInvalidChunk(string chunk)
+        public static void TestParseInvalidChunk(string chunk)
         {
             Assert.Throws(typeof(TafChunkDecoderException), () =>
             {
                 chunkDecoder.Parse(chunk);
             });
         }
+
         public static List<Tuple<string, int, CloudAmount, int?, CloudType, string>> ValidChunks => new List<Tuple<string, int, CloudAmount, int?, CloudType, string>>()
         {
             new Tuple<string, int, CloudAmount, int?, CloudType, string>("VV085 AAA", 1, CloudAmount.VV, 8500, CloudType.NULL, "AAA"),
