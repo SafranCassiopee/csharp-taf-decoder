@@ -53,11 +53,11 @@
     <Compile Include="ChunkDecoder\DatetimeChunkDecoderTest.cs" />
     <Compile Include="ChunkDecoder\EvolutionChunkDecoderTest.cs" />
     <Compile Include="ChunkDecoder\ForecastPeriodChunkDecoderTest.cs" />
-    <Compile Include="ChunkDecoder\IcaoChunkDecoder.cs" />
+    <Compile Include="ChunkDecoder\IcaoChunkDecoderTest.cs" />
     <Compile Include="ChunkDecoder\ReportTypeChunkDecoderTest.cs" />
     <Compile Include="ChunkDecoder\SurfaceWindChunkDecoderTest.cs" />
     <Compile Include="ChunkDecoder\VisibilityChunkDecoderTest.cs" />
-    <Compile Include="ChunkDecoder\WeatherPhenomenonTest.cs" />
+    <Compile Include="ChunkDecoder\WeatherPhenomenonDecoderTest.cs" />
     <Compile Include="ChunkDecoder\TemperatureChunkDecoderTest.cs" />
     <Compile Include="TafDecoderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

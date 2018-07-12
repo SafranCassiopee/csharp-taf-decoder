@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace csharp_taf_decoder_tests.ChunkDecoder
 {
     [TestFixture, Category("WeatherPhenomenon")]
-    public class WeatherPhenomenonTest
+    public class WeatherPhenomenonDecoderTest
     {
         private static readonly WeatherPhenomenon chunkDecoder = new WeatherPhenomenon();
     }
