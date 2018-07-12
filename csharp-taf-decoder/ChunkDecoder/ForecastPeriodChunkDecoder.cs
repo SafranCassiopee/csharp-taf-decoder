@@ -12,7 +12,7 @@ namespace csharp_taf_decoder.chunkdecoder
         public const string ForecastPeriodParameterName = "ForecastPeriod";
         public override string GetRegex()
         {
-            return "([0-9]{2})([0-9]{2})/([0-9]{2})([0-9]{2}) ";
+            return "^([0-9]{2})([0-9]{2})/([0-9]{2})([0-9]{2}) ";
         }
 
         public override Dictionary<string, object> Parse(string remainingTaf, bool withCavok = false)

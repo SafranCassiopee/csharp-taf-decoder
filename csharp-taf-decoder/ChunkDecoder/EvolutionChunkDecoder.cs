@@ -23,7 +23,7 @@ namespace csharp_taf_decoder.chunkdecoder
             return $"{TypePattern}{PeriodPattern}{RestPattern}";
         }
 
-        private ReadOnlyCollection<TafChunkDecoder> _decoderChain = new ReadOnlyCollection<TafChunkDecoder>(new List<TafChunkDecoder>
+        private readonly ReadOnlyCollection<TafChunkDecoder> _decoderChain = new ReadOnlyCollection<TafChunkDecoder>(new List<TafChunkDecoder>
         {
             new SurfaceWindChunkDecoder(),
             new VisibilityChunkDecoder(),
@@ -42,19 +42,19 @@ namespace csharp_taf_decoder.chunkdecoder
         {
             var consumed = Consume(remainingTaf);
             var found = consumed.Value;
-            var newRemainingTaf = consumed.Key;
-            var result = new Dictionary<string, object>();
+            
+            if (found.Count <= 1)
+            {
+                // the first chunk didn't match anything, so we remove it to avoid an infinite loop
+                // note: regex approach wasn't working
+                Remaining = remainingTaf.Substring(remainingTaf.IndexOfAny(new char[] { ' ', '\r', '\n' }) + 1);
+                return;
+            }
 
             var evolutionType = found[1].Value.Trim();
             var evolutionPeriod = found[2].Value.Trim();
             var remaining = found[3].Value;
 
-            if (found.Count <= 1)
-            {
-                // the first chunk didn't match anything, so we remove it to avoid an infinite loop
-                Remaining = Regex.Replace(remainingTaf, "=(\\S+\\s+)(.*)", string.Empty);
-                return;
-            }
             var evolution = new Evolution() { Type = evolutionType };
             if (remaining.StartsWith("PROB"))
             {

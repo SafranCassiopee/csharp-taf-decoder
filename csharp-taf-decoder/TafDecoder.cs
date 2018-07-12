@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace csharp_taf_decoder
 {
-    public sealed class TafDecoder
+    public static class TafDecoder
     {
         public const string ResultKey = "Result";
         public const string RemainingTafKey = "RemainingTaf";
@@ -109,13 +109,6 @@ namespace csharp_taf_decoder
                     // try to parse a chunk with current chunk decoder
                     var decodedData = chunkDecoder.Parse(remainingTaf, withCavok);
 
-                    //TODELETE
-                    //// log any exception that would have occur at primary decoding
-                    //if (decodedData.ContainsKey(ExceptionKey))
-                    //{
-                    //    decodedTaf.AddDecodingException((TafChunkDecoderException)decodedData[ExceptionKey]);
-                    //}
-
                     // map obtained fields (if any) to the final decoded object
                      if (decodedData.ContainsKey(ResultKey) && decodedData[ResultKey] is Dictionary<string, object>)
                     {
@@ -155,11 +148,11 @@ namespace csharp_taf_decoder
             //TODO In error Enable after EvolutionChunkDecoder implementation
             // weather evolutions
             var evolutionDecoder = new EvolutionChunkDecoder(isStrict, withCavok);
-            //while (!string.IsNullOrEmpty(remainingTaf) && remainingTaf.Trim() != "END")
-            //{
-            //    evolutionDecoder.Parse(remainingTaf, decodedTaf);
-            //    remainingTaf = evolutionDecoder.Remaining;
-            //}
+            while (!string.IsNullOrEmpty(remainingTaf) && remainingTaf.Trim() != "END")
+            {
+                evolutionDecoder.Parse(remainingTaf, decodedTaf);
+                remainingTaf = evolutionDecoder.Remaining;
+            }
 
             return decodedTaf;
         }

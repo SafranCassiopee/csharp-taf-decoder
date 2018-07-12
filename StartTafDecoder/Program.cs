@@ -27,8 +27,6 @@ namespace StartTafDecoder
         {
             TafDecoder.SetStrictParsing(true);
 
-            var tafDecoder = new TafDecoder();
-
             var options = new Options();
             if (Parser.Default.ParseArguments(args, options))
             {

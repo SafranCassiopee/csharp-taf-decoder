@@ -149,6 +149,7 @@ public class TafDecoderTest
     public void TestParseDefaultStrictMode()
     {
         // strict mode, max 1 error triggered
+        //TODO Reenable
         TafDecoder.SetStrictParsing(true);
         var d = TafDecoder.Parse("TAF TAF LIR 032244Z 0318/0206 23010KT P6SM BKN020CB TX05/0318Z TNM03/0405Z\n");
         Assert.AreEqual(1, d.DecodingExceptions.Count);
@@ -156,7 +157,7 @@ public class TafDecoderTest
         TafDecoder.SetStrictParsing(false);
         d = TafDecoder.Parse("TAF TAF LIR 032244Z 0318/0206 23010KT\n");
         //TODO: Fix
-        //Assert.AreEqual(6, d.DecodingExceptions.Count);
+        Assert.AreEqual(6, d.DecodingExceptions.Count);
     }
     /// <summary>
     /// Test parsing of invalid TAFs
