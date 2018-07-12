@@ -1,10 +1,8 @@
 ﻿using csharp_taf_decoder;
 using csharp_taf_decoder.chunkdecoder;
-using csharp_taf_decoder.entity;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using static csharp_taf_decoder.entity.CloudLayer;
 
 namespace csharp_taf_decoder_tests.ChunkDecoder
 {
