@@ -156,37 +156,5 @@ namespace csharp_taf_decoder
 
             return decodedTaf;
         }
-
-        //TODELETE
-        //private static Dictionary<string, object> TryParsing(ITafChunkDecoder chunkDecoder, bool strict, string remainingTaf, bool withCavok)
-        //{
-        //    Dictionary<string, object> decoded;
-        //    try
-        //    {
-        //        decoded = chunkDecoder.Parse(remainingTaf, withCavok);
-        //    }
-        //    catch (TafChunkDecoderException primaryException)
-        //    {
-        //        if (strict)
-        //        {
-        //            throw;
-        //        }
-        //        else
-        //        {
-        //            try
-        //            {
-        //                //the PHP version of ConsumeOneChunk implements an additional, unused strict flag
-        //                var alternativeRemainingTaf = TafChunkDecoder.ConsumeOneChunk(remainingTaf);
-        //                decoded = chunkDecoder.Parse(alternativeRemainingTaf, withCavok);
-        //                decoded.Add(ExceptionKey, primaryException);
-        //            }
-        //            catch (TafChunkDecoderException)
-        //            {
-        //                throw primaryException;
-        //            }
-        //        }
-        //    }
-        //    return decoded;
-        //}
     }
 }

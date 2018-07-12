@@ -1,7 +1,10 @@
 ﻿
 using csharp_taf_decoder;
+using csharp_taf_decoder.chunkdecoder;
 using csharp_taf_decoder.entity;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using static csharp_taf_decoder.entity.DecodedTaf;
 
@@ -149,50 +152,40 @@ public class TafDecoderTest
     public void TestParseDefaultStrictMode()
     {
         // strict mode, max 1 error triggered
-        //TODO Reenable
         TafDecoder.SetStrictParsing(true);
         var d = TafDecoder.Parse("TAF TAF LIR 032244Z 0318/0206 23010KT P6SM BKN020CB TX05/0318Z TNM03/0405Z\n");
         Assert.AreEqual(1, d.DecodingExceptions.Count);
         // not strict: several errors triggered (6 because the icao failure causes the next ones to fail too)
         TafDecoder.SetStrictParsing(false);
         d = TafDecoder.Parse("TAF TAF LIR 032244Z 0318/0206 23010KT\n");
-        //TODO: Fix
         Assert.AreEqual(6, d.DecodingExceptions.Count);
     }
     /// <summary>
     /// Test parsing of invalid TAFs
     /// </summary>
-    [Test]
-    public void TestParseErrors()
+    [Test, TestCaseSource("ErrorChunks")]
+    public void TestParseErrors(Tuple<string, Type, string> source)
     {
-        //error_dataset = array(
-        //    array("TAF LFPG aaa bbb cccc", "DatetimeChunkDecoder", "AAA BBB CCCC END"),
-        //    array("TAF LFPO 231027Z NIL 1234", "ForecastPeriodChunkDecoder", "NIL 1234 END"),
-        //    array("TAF LFPO 231027Z 2310/2411 NIL 12345 ", "SurfaceWindChunkDecoder", "NIL 12345 END"),
-        //);
-        //foreach (error_dataset as taf_error)
-        //{
-        //    // launch decoding
-        //    d = this.decoder.parseNotStrict(taf_error[0]);
-        //    // check the error triggered
-        //    Assert.False(d.isValid);
-        //    errors = d.DecodingExceptions;
-        //    first_error = errors[0];
-        //    Assert.AreEqual(taf_error[1], first_error.ChunkDecoder);
-        //    Assert.AreEqual(taf_error[2], first_error.Chunk);
-        //    d.resetDecodingExceptions;
-        //    Assert.Empty(d.DecodingExceptions);
-        //}
+        // launch decoding  
+        DecodedTaf decodedTaf = TafDecoder.ParseNotStrict(source.Item1);
+
+        // check the error triggered
+        Assert.NotNull(decodedTaf);
+        Assert.False(decodedTaf.IsValid, "DecodedTaf should be invalid.");
+        var errors = decodedTaf.DecodingExceptions;
+        Assert.AreEqual(source.Item2, errors.FirstOrDefault().ChunkDecoder.GetType(), "ChunkDecoder type is incorrect.");
+        Assert.AreEqual(source.Item3, errors.FirstOrDefault().RemainingTaf, "RemainingTaf is incorrect.");
+        decodedTaf.ResetDecodingExceptions();
+        Assert.AreEqual(0, decodedTaf.DecodingExceptions.Count, "DecodingExceptions should be empty.");
     }
-    /// <summary>
-    /// Test invalid values
-    /// </summary>
-    [Test]
-    public void TestValueErrors()
+
+
+    public static List<Tuple<string, Type, string>> ErrorChunks()
     {
-        //var newValue = new Value(null, null);
-        // Assert.Null(newValue.ActualValue);
-        // Assert.Null(newValue.newValue(null, null));
-        // Assert.Null(newValue.newIntValue("AB", null).ActualValue);
+        return new List<Tuple<string, Type, string>>() {
+                new Tuple<string, Type, string>("TAF LFPG aaa bbb cccc", typeof(DatetimeChunkDecoder), "AAA BBB CCCC END"),
+                new Tuple<string, Type, string>("TAF LFPO 231027Z NIL 1234", typeof(ForecastPeriodChunkDecoder), "NIL 1234 END"),
+                new Tuple<string, Type, string>("TAF LFPO 231027Z 2310/2411 NIL 12345", typeof(SurfaceWindChunkDecoder), "NIL 12345 END"),
+            };
     }
 }
