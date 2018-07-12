@@ -15,8 +15,8 @@ namespace csharp_taf_decoder.chunkdecoder
         private const string PeriodPattern = "([0-9]{4}/[0-9]{4}\\s+|[0-9]{6}\\s+){1}";
         private const string RestPattern = "(.*)";
 
-        private bool _withCavok;
-        public bool IsStrict { get; set; }
+        public bool WithCavok { get; private set; }
+        public bool IsStrict { get; private set; }
         public string Remaining { get; private set; }
         public override string GetRegex()
         {
@@ -35,7 +35,7 @@ namespace csharp_taf_decoder.chunkdecoder
         public EvolutionChunkDecoder(bool isStrict, bool withCavok)
         {
             IsStrict = isStrict;
-            _withCavok = withCavok;
+            WithCavok = withCavok;
         }
 
         public void Parse(string remainingTaf, DecodedTaf decodedTaf)
@@ -103,10 +103,10 @@ namespace csharp_taf_decoder.chunkdecoder
                     remainingEvo = ProbabilityChunkDecoder(evolution, remainingEvo, decodedTaf);
 
                     // reset cavok
-                    _withCavok = false;
+                    WithCavok = false;
 
                     // try to parse the chunk with the current chunk decoder
-                    var decoded = chunkDecoder.Parse(remainingEvo, _withCavok);
+                    var decoded = chunkDecoder.Parse(remainingEvo, WithCavok);
 
                     // map the obtained fields (if any) to a original entity in the decoded_taf
                     var result = decoded[TafDecoder.ResultKey] as Dictionary<string, object>;
@@ -122,7 +122,7 @@ namespace csharp_taf_decoder.chunkdecoder
                     {
                         if (result[entityName] is bool && (bool)result[entityName])
                         {
-                            _withCavok = true;
+                            WithCavok = true;
                         }
                         entityName = "visibility";
                     }
@@ -214,7 +214,7 @@ namespace csharp_taf_decoder.chunkdecoder
             newEvolution.Entity = result[entityName];
 
             // possibly add cavok to it
-            if (entityName == "visibility" && _withCavok)
+            if (entityName == "visibility" && WithCavok)
             {
                 newEvolution.Cavok = true;
             }
