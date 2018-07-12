@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static csharp_taf_decoder.entity.DecodedTaf;
 
-[TestFixture, Category("Decoder")]
+[TestFixture, Category("TafDecoder")]
 public class TafDecoderTest
 {
     /// <summary>
