@@ -11,6 +11,7 @@ namespace csharp_taf_decoder.entity
             NULL,
             TAF,
             TAFAMD,
+            TAFCOR,
         }
 
         private string _rawTaf;

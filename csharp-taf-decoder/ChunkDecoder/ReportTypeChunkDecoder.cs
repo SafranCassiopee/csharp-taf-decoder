@@ -23,13 +23,13 @@ namespace csharp_taf_decoder.chunkdecoder
             // handle the case where nothing has been found
             if (found.Count <= 1)
             {
-                result = null;
+                result.Add(TypeParameterName, TafType.NULL);
             }
             else
             {
                 // retrieve found params
                 // 'TAF' sometimes happens to be duplicated
-                result.Add(TypeParameterName, (TafType)Enum.Parse(typeof(TafType), found[1].Value.Replace("TAF TAF", "TAF")));
+                result.Add(TypeParameterName, (TafType)Enum.Parse(typeof(TafType), found[1].Value.Replace("TAF TAF", "TAF").Replace(" ", string.Empty)));
             }
 
             return GetResults(newRemainingTaf, result);
