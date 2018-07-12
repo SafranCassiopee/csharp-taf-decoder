@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using static csharp_taf_decoder.entity.DecodedTaf;
 
-[TestFixture, Category("Entity")]
+[TestFixture, Category("Decoder")]
 public class TafDecoderTest
 {
     /// <summary>
@@ -186,6 +186,6 @@ public class TafDecoderTest
                 new Tuple<string, Type, string>("TAF LFPG aaa bbb cccc", typeof(DatetimeChunkDecoder), "AAA BBB CCCC END"),
                 new Tuple<string, Type, string>("TAF LFPO 231027Z NIL 1234", typeof(ForecastPeriodChunkDecoder), "NIL 1234 END"),
                 new Tuple<string, Type, string>("TAF LFPO 231027Z 2310/2411 NIL 12345", typeof(SurfaceWindChunkDecoder), "NIL 12345 END"),
-            };
+       };
     }
 }
