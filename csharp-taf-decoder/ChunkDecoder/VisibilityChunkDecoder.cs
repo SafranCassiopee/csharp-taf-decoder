@@ -68,7 +68,7 @@ namespace csharp_taf_decoder.chunkdecoder
                     {
                         if (fractionBottom != 0)
                         {
-                            visibilityValue = (double)main + fractionTop / fractionBottom;
+                            visibilityValue = (double)main + (double)fractionTop / fractionBottom;
                         }
                         else
                         {
