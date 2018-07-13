@@ -43,8 +43,6 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             Assert.AreEqual(chunk.Item6, decoded[TafDecoder.RemainingTafKey]);
         }
 
-
-
         /// <summary>
         /// Test parsing of invalid visibility chunks
         /// </summary>
