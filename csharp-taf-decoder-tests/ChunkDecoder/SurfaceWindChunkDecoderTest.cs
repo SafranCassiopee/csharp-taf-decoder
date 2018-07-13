@@ -47,7 +47,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         }
 
         /// <summary>
-        /// Test parsing of invalid icao chunks
+        /// Test parsing of invalid surface wind chunks
         /// </summary>
         /// <param name="chunk"></param>
         [Test, TestCaseSource("InvalidChunks")]
