@@ -29,13 +29,16 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                 Assert.AreEqual(Unit.Degree, surfaceWind.MeanDirection.ActualUnit);
             }
             Assert.AreEqual(chunk.VariableDirection, surfaceWind.VariableDirection);
-            var dir_var_min = surfaceWind.DirectionVariations[0];
-            var dir_var_max = surfaceWind.DirectionVariations[1];
-            if (chunk.DirectionVariations != null)
+            if (surfaceWind.DirectionVariations != null)
             {
-                Assert.AreEqual(chunk.DirectionVariations[0], dir_var_min.ActualValue);
-                Assert.AreEqual(chunk.DirectionVariations[1], dir_var_max.ActualValue);
-                Assert.AreEqual(Unit.Degree, dir_var_min.ActualUnit);
+                var minimumDirectionVariation = surfaceWind.DirectionVariations[0];
+                var maximumDirectionVariation = surfaceWind.DirectionVariations[1];
+                if (chunk.DirectionVariations != null)
+                {
+                    Assert.AreEqual(chunk.DirectionVariations[0].ActualValue, minimumDirectionVariation.ActualValue);
+                    Assert.AreEqual(chunk.DirectionVariations[1].ActualValue, maximumDirectionVariation.ActualValue);
+                    Assert.AreEqual(Unit.Degree, minimumDirectionVariation.ActualUnit);
+                }
             }
             Assert.AreEqual(chunk.Speed, surfaceWind.MeanSpeed.ActualValue);
             if (chunk.SpeedVariations != null)
@@ -102,6 +105,10 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             public Unit SpeedUnit;
             public Value[] DirectionVariations;
             public string Remaining;
+            public override string ToString()
+            {
+                return Chunk;
+            }
 
             public SurfaceWindChunkDecoderTester(string chunk, int? direction, bool variableDirection, int speed, int? speedVariations, Unit speedUnit, Value[] directionVariations, string remaining)
             {

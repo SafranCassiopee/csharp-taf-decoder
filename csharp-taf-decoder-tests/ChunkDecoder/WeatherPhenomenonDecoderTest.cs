@@ -39,12 +39,16 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             new WeatherPhenomenonChunkDecoderTester() { Chunk = "TSRABR DDD",   Remaining = "DDD", WeatherPhenomons = new List<WeatherPhenomenon>() { new WeatherPhenomenon() { IntensityProximity = "",   Descriptor = "TS", Phenomena = new List<string>() { "RA", "BR" } } } },
             new WeatherPhenomenonChunkDecoderTester() { Chunk = "-FZDZ FG EEE", Remaining = "EEE", WeatherPhenomons = new List<WeatherPhenomenon>() { new WeatherPhenomenon() { IntensityProximity = "-",  Descriptor = "FZ", Phenomena = new List<string>() { "DZ" } } , new WeatherPhenomenon() { IntensityProximity = "", Descriptor = "", Phenomena = new List<string>() { "FG" } } } },
         };
+    }
 
-        public class WeatherPhenomenonChunkDecoderTester
+    public class WeatherPhenomenonChunkDecoderTester
+    {
+        public string Chunk { get; set; }
+        public List<WeatherPhenomenon> WeatherPhenomons { get; set; }
+        public string Remaining { get; set; }
+        public override string ToString()
         {
-            public string Chunk { get; set; }
-            public List<WeatherPhenomenon>  WeatherPhenomons { get; set; }
-            public string Remaining { get; set; }
+            return Chunk;
         }
     }
 }
