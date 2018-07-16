@@ -37,6 +37,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             if (!string.IsNullOrEmpty(chunk.Element.EmbEvolutionType))
             {
                 // it's embedded in the second evolution
+                Assert.LessOrEqual(2, windEvolutions.Count);
                 var emb_evolutions = windEvolutions[1].Evolutions;
                 Assert.AreEqual(chunk.Element.EmbEvolutionType, emb_evolutions[0].Type);
             }
@@ -135,7 +136,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                     Visibility = null,
                     Cavok = true,
                     Greater = false,
-                    WeatherPhenomena = null,
+                    WeatherPhenomena = new List<string>(),
                     WeatherIntensity = string.Empty,
                     WeatherDesc = string.Empty,
                     CloudsAmount = CloudAmount.BKN,
@@ -165,7 +166,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                     Visibility = null,
                     Cavok = true,
                     Greater = false,
-                    WeatherPhenomena = null,
+                    WeatherPhenomena = new List<string>(),
                     WeatherIntensity = string.Empty,
                     WeatherDesc = string.Empty,
                     CloudsAmount = CloudAmount.NULL,
@@ -195,7 +196,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                     Visibility = 4000,
                     Cavok = false,
                     Greater = false,
-                    WeatherPhenomena = null,
+                    WeatherPhenomena = new List<string>(),
                     WeatherIntensity = string.Empty,
                     WeatherDesc = string.Empty,
                     CloudsAmount = CloudAmount.NULL,
@@ -294,7 +295,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         public int? Visibility { get; set; }
         public bool Cavok { get; set; }
         public bool Greater { get; set; }
-        public List<string> WeatherPhenomena { get; set; }
+        public List<string> WeatherPhenomena { get; set; } = new List<string>();
         public string WeatherIntensity { get; set; }
         public string WeatherDesc { get; set; }
         public CloudAmount CloudsAmount { get; set; }

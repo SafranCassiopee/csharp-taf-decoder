@@ -129,20 +129,22 @@ namespace csharp_taf_decoder.chunkdecoder
                         }
                         entityName = VisibilityChunkDecoder.VisibilityParameterName;
                     }
-                    var entity = result[entityName];
-                    if (entity == null && entityName != VisibilityChunkDecoder.VisibilityParameterName)
+                    if (result.ContainsKey(entityName))
                     {
-                        // visibility will be null if cavok is true but we still want to add the evolution
-                        throw new TafChunkDecoderException(chunk, remainingEvo, "Bad format for weather evolution", this);
-                    }
-                    if (entityName == TemperatureChunkDecoder.MaximumTemperatureParameterName)
-                    {
-                        AddEvolution(evolution, decodedTaf, result, TemperatureChunkDecoder.MaximumTemperatureParameterName);
-                        AddEvolution(evolution, decodedTaf, result, TemperatureChunkDecoder.MinimumTemperatureParameterName);
-                    }
-                    else
-                    {
-                        AddEvolution(evolution, decodedTaf, result, entityName);
+                        if (result[entityName] == null && entityName != VisibilityChunkDecoder.VisibilityParameterName)
+                        {
+                            // visibility will be null if cavok is true but we still want to add the evolution
+                            throw new TafChunkDecoderException(chunk, remainingEvo, "Bad format for weather evolution", this);
+                        }
+                        if (entityName == TemperatureChunkDecoder.MaximumTemperatureParameterName)
+                        {
+                            AddEvolution(evolution, decodedTaf, result, TemperatureChunkDecoder.MaximumTemperatureParameterName);
+                            AddEvolution(evolution, decodedTaf, result, TemperatureChunkDecoder.MinimumTemperatureParameterName);
+                        }
+                        else
+                        {
+                            AddEvolution(evolution, decodedTaf, result, entityName);
+                        }
                     }
 
                     // update remaining evo for the next round
@@ -223,14 +225,14 @@ namespace csharp_taf_decoder.chunkdecoder
             }
 
             // get the original entity from the decoded taf or a new one decoded taf doesn't contain it yet
-            var decodedEntityValue = typeof(DecodedTaf).GetProperty(entityName).GetValue(decodedTaf);//.ToString().Split('.');
-            AbstractEntity decodedEntity = new AbstractEntity();
+            var decodedEntityValue = typeof(DecodedTaf).GetProperty(entityName).GetValue(decodedTaf);
+            AbstractEntity decodedEntity = InstantiateEntity(entityName);
 
-            if (decodedEntityValue != null || entityName == CloudChunkDecoder.CloudsParameterName || entityName == WeatherPhenomenonChunkDecoder.WeatherPhenomenonParameterName)
-            {
-                // that entity is not in the decoded_taf yet, or it's a cloud layer which is a special case
-                decodedEntity = InstantiateEntity(entityName);
-            }
+            //if (decodedEntityValue != null || entityName == CloudChunkDecoder.CloudsParameterName || entityName == WeatherPhenomenonChunkDecoder.WeatherPhenomenonParameterName)
+            //{
+            //    // that entity is not in the decoded_taf yet, or it's a cloud layer which is a special case
+            //    decodedEntity = InstantiateEntity(entityName);
+            //}
 
             // add the new evolution to that entity
             decodedEntity.Evolutions.Add(newEvolution);
@@ -247,11 +249,22 @@ namespace csharp_taf_decoder.chunkdecoder
             else
             {
                 //TODO
-                decodedTaf.GetType().InvokeMember(entityName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty, Type.DefaultBinder, decodedTaf, new object[] { decodedEntity });
+                try
+                {
+                    var property = typeof(DecodedTaf).GetProperty(entityName);
+                    //decodedTaf.GetType().InvokeMember(entityName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty, Type.DefaultBinder, decodedTaf, new object[] { decodedEntity });
+                    property.SetValue(decodedTaf, decodedEntity);
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+
                 //typeof(DecodedTaf).SetProperty(entityName).GetValue(decodedTaf);
-    //            obj.GetType().InvokeMember("Name",
-    //BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty,
-    //Type.DefaultBinder, obj, "Value");
+                //            obj.GetType().InvokeMember("Name",
+                //BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty,
+                //Type.DefaultBinder, obj, "Value");
                 //decodedTaf->$setter_name($decoded_entity);
             }
         }
