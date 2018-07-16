@@ -37,12 +37,23 @@ namespace csharp_taf_decoder.entity
         /// <summary>
         /// optional annotation corresponding to the probability (PROBnn)
         /// </summary>
-        public string Probability { get; set; }
+        public string Probability { get; set; } = string.Empty;
 
 
         public object Clone()
         {
-            return Cloner.Clone(this);
+            return new Evolution()
+            {
+                Type = this.Type,
+                FromDay = this.FromDay,
+                FromTime = this.FromTime,
+                ToDay = this.ToDay,
+                ToTime = this.ToTime,
+                Cavok = this.Cavok,
+                Probability = this.Probability,
+                Entity = this.Entity,
+                Evolutions = this.Evolutions,
+            };
         }
     }
 }

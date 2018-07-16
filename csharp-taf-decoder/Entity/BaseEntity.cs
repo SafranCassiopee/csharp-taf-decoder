@@ -11,6 +11,6 @@ namespace csharp_taf_decoder.entity
         /// <summary>
         ///  an evolution can contain embedded evolutions with different probabilities
         /// </summary>
-        public List<Evolution> Evolutions { get; set; }
+        public List<Evolution> Evolutions { get; set; } = new List<Evolution>();
     }
 }

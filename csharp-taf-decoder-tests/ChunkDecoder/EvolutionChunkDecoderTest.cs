@@ -12,10 +12,82 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
     [TestFixture, Category("EvolutionChunkDecoder")]
     public class EvolutionChunkDecoderTest
     {
-        private static readonly EvolutionChunkDecoder chunkDecoder = new EvolutionChunkDecoder(false, false);
+        private static readonly EvolutionChunkDecoder evoDecoder = new EvolutionChunkDecoder(false, false);
 
+        //  Test parsing of evolution chunks
+        [Test, TestCaseSource("Chunks")]
+        public void TestParse(EvolutionChunkDecoderTester chunk)
+        {
+            var decodedTaf = TafDecoder.ParseStrict(chunk.Base);
+            evoDecoder.IsStrict = chunk.Strict;
+            evoDecoder.Parse(chunk.EvoChunk + " END", decodedTaf);
+
+            var windEvolutions = decodedTaf.SurfaceWind.Evolutions;
+            if (windEvolutions.Count == 0)
+            {
+                return;
+            }
+            // global evolution attributes (no point testing them in each evolution as they never change)
+            Assert.AreEqual(chunk.Type, windEvolutions[0].Type);
+            Assert.AreEqual(chunk.Probability, windEvolutions[0].Probability);
+            Assert.AreEqual(chunk.FromDay, windEvolutions[0].FromDay);
+            Assert.AreEqual(chunk.FromTime, windEvolutions[0].FromTime);
+            Assert.AreEqual(chunk.ToDay, windEvolutions[0].ToDay);
+            Assert.AreEqual(chunk.ToTime, windEvolutions[0].ToTime);
+            if (!string.IsNullOrEmpty(chunk.Element.EmbEvolutionType))
+            {
+                // it's embedded in the second evolution
+                var emb_evolutions = windEvolutions[1].Evolutions;
+                Assert.AreEqual(chunk.Element.EmbEvolutionType, emb_evolutions[0].Type);
+            }
+            // surfaceWind attributes
+            Assert.AreEqual(chunk.Element.WindDirection, (windEvolutions[0].Entity as SurfaceWind).MeanDirection.ActualValue);
+            Assert.AreEqual(chunk.Element.WindSpeed, (windEvolutions[0].Entity as SurfaceWind).MeanSpeed.ActualValue);
+
+            var visiEvolutions = decodedTaf.Visibility.Evolutions;
+            Assert.AreEqual(chunk.Element.Cavok, visiEvolutions[0].Cavok);
+            if (!visiEvolutions[0].Cavok)
+            {
+                // cavok and visibility are mutually exclusive
+                Assert.AreEqual(chunk.Element.Visibility, (visiEvolutions[0].Entity as Visibility).ActualVisibility.ActualValue);
+                Assert.AreEqual(chunk.Element.Greater, (visiEvolutions[0].Entity as Visibility).Greater);
+            }
+            if (chunk.Element.WeatherPhenomena.Count > 0)
+            {
+                if (decodedTaf.WeatherPhenomenons.Count > 0)
+                {
+                    var proxyWeatherPhenomena = decodedTaf.WeatherPhenomenons;
+                    var weatherPhenomena = proxyWeatherPhenomena[0].Evolutions;
+                    var entity = weatherPhenomena[0].Entity as List<WeatherPhenomenon>;
+                    Assert.AreEqual(chunk.Element.WeatherIntensity, entity[0].IntensityProximity);
+                    Assert.AreEqual(chunk.Element.WeatherDesc, entity[0].Descriptor);
+                    Assert.AreEqual(chunk.Element.WeatherPhenomena, entity[0].Phenomena);
+                }
+            }
+            var clouds = decodedTaf.Clouds;
+            if (chunk.Element.CloudsBaseHeight.HasValue)
+            {
+                //TODO
+                //// 1 instead of 0 because each evo is considered a new layer
+                //var cloudsEvolutions = clouds[1].Evolutions;
+                //Assert.AreEqual(chunk.Type, cloudsEvolutions[0].Type);
+                //var cloudsEvolution = cloudsEvolutions[0];
+                //var cloudsLayers = cloudsEvolution.Entity as List<CloudLayer>;
+                //Assert.AreEqual(chunk.Element.CloudsAmount, cloudsLayers[0].Amount);
+                //Assert.AreEqual(chunk.Element.CloudsBaseHeight, cloudsLayers[0].BaseHeight.ActualValue);
+            }
+            if (chunk.Element.MinimumTemperatureValue.HasValue)
+            {
+                //TODO
+                //var minTemps = decodedTaf.MinimumTemperature.Evolutions;
+                //var maxTemps = decodedTaf.MaximumTemperature.Evolutions;
+                //Assert.AreEqual(chunk.Element.MinimumTemperatureValue, (minTemps[0].Entity as Temperature).TemperatureValue.ActualValue);
+                //Assert.AreEqual(chunk.Element.MaximumTemperatureValue, (maxTemps[0].Entity as Temperature).TemperatureValue.ActualValue);
+            }
+        }
         public static List<EvolutionChunkDecoderTester> Chunks => new List<EvolutionChunkDecoderTester>()
         {
+            // common cases
             new EvolutionChunkDecoderTester() {
                 Strict = true,
                 Base = "TAF KJFK 080500Z 0806/0910 23010KT 6 1/4SM BKN020",
@@ -26,26 +98,173 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                 FromTime = "07:00 UTC",
                 ToDay = 8,
                 ToTime = "10:00 UTC",
-                Elements = new List<Element>()
+                Element = new Element()
                 {
-                    new Element()
-                    {
-                        WindDirection = 230,
-                        WindSpeed = 24,
-                        Visibility = 6,
-                        Cavok = false,
-                        Greater = true,
-                        WeatherPhenomena = new List<string>() { "RA" },
-                        WeatherIntensity = "+",
-                        WeatherDesc = "SH",
-                        CloudsAmount = CloudAmount.BKN ,
-                        CloudsBaseHeight = 2500,
-                        MinimumTemperatureValue = -1,
-                        MaximumTemperatureValue = 8,
-                        EmbEvolutionType = null,
-                    }
+                    WindDirection = 230,
+                    WindSpeed = 24,
+                    Visibility = 6,
+                    Cavok = false,
+                    Greater = true,
+                    WeatherPhenomena = new List<string>() { "RA" },
+                    WeatherIntensity = "+",
+                    WeatherDesc = "SH",
+                    CloudsAmount = CloudAmount.BKN ,
+                    CloudsBaseHeight = 2500,
+                    MinimumTemperatureValue = -1,
+                    MaximumTemperatureValue = 8,
+                    EmbEvolutionType = null,
                 }
-            }
+            },
+
+            // line starting with PROB
+            new EvolutionChunkDecoderTester()
+            {
+                Strict = true,
+                Base = "TAF KJFK 080500Z 0806/0910 23010KT 6 1/4SM BKN020",
+                EvoChunk = "PROB40 TEMPO 0807/0810 23024KT CAVOK BKN025",
+                Type = "TEMPO",
+                Probability = "PROB40",
+                FromDay = 8,
+                FromTime = "07:00 UTC",
+                ToDay = 8,
+                ToTime = "10:00 UTC",
+                Element = new Element()
+                {
+                    WindDirection = 230,
+                    WindSpeed = 24,
+                    Visibility = null,
+                    Cavok = true,
+                    Greater = false,
+                    WeatherPhenomena = null,
+                    WeatherIntensity = string.Empty,
+                    WeatherDesc = string.Empty,
+                    CloudsAmount = CloudAmount.BKN,
+                    CloudsBaseHeight = 2500,
+                    MinimumTemperatureValue = null,
+                    MaximumTemperatureValue = null,
+                    EmbEvolutionType = string.Empty,
+                }
+            },
+
+            // embedded evolutions
+            new EvolutionChunkDecoderTester()
+            {
+                Strict = true,
+                Base = "TAF KJFK 080500Z 0806/0910 23010KT",
+                EvoChunk = "BECMG 0807/0810 23024KT CAVOK -RA PROB40 TEMPO 0808/0809 18020KT",
+                Type = "BECMG",
+                Probability = string.Empty,
+                FromDay = 8,
+                FromTime = "07:00 UTC",
+                ToDay = 8,
+                ToTime = "10:00 UTC",
+                Element = new Element()
+                {
+                    WindDirection = 230,
+                    WindSpeed = 24,
+                    Visibility = null,
+                    Cavok = true,
+                    Greater = false,
+                    WeatherPhenomena = null,
+                    WeatherIntensity = string.Empty,
+                    WeatherDesc = string.Empty,
+                    CloudsAmount = CloudAmount.NULL,
+                    CloudsBaseHeight = null,
+                    MinimumTemperatureValue = null,
+                    MaximumTemperatureValue = null,
+                    EmbEvolutionType = "TEMPO",
+                }
+            },
+
+            //surfaceWind and visibility entities
+            new EvolutionChunkDecoderTester()
+            {
+                Strict = false,
+                Base = "TAF BAH KJFK 080500Z 0806/0910 TX10/0807Z TN05/0904Z",
+                EvoChunk = "BECMG 0810/0812 27010KT 4000 -RA BKN025",
+                Type = "BECMG",
+                Probability = string.Empty,
+                FromDay = 8,
+                FromTime = "10:00 UTC",
+                ToDay = 8,
+                ToTime = "12:00 UTC",
+                Element = new Element()
+                {
+                    WindDirection = 270,
+                    WindSpeed = 10,
+                    Visibility = 4000,
+                    Cavok = false,
+                    Greater = false,
+                    WeatherPhenomena = null,
+                    WeatherIntensity = string.Empty,
+                    WeatherDesc = string.Empty,
+                    CloudsAmount = CloudAmount.NULL,
+                    CloudsBaseHeight = null,
+                    MinimumTemperatureValue = null,
+                    MaximumTemperatureValue = null,
+                    EmbEvolutionType = null,
+                }
+            },
+
+            // drop a chunk that doesn't match with any decoder
+            new EvolutionChunkDecoderTester()
+            {
+                Strict = false,
+                Base = "TAF KJFK 081009Z 0810/0912 03017G28KT 9000 BKN020",
+                EvoChunk = "FM081100 03018G27KT 6000 -SN OVC015 PROB40 0811/0912 AAA",
+                Type = "FM",
+                Probability = string.Empty,
+                FromDay = 8,
+                FromTime = "11:00 UTC",
+                ToDay = null,
+                ToTime = string.Empty,
+                Element = new Element()
+                {
+                    WindDirection = 30,
+                    WindSpeed = 18,
+                    Visibility = 6000,
+                    Cavok = false,
+                    Greater = false,
+                    WeatherPhenomena = new List<string>() { "SN" },
+                    WeatherIntensity = "-",
+                    WeatherDesc = string.Empty,
+                    CloudsAmount = CloudAmount.OVC,
+                    CloudsBaseHeight = 1500,
+                    MinimumTemperatureValue = null,
+                    MaximumTemperatureValue = null,
+                    EmbEvolutionType = null,
+                }
+            },
+
+            // trigger a ChunkDecoderException
+            new EvolutionChunkDecoderTester()
+            {
+                Strict = true,
+                Base = "TAF KJFK 081009Z 0810/0912 03017G28KT 9000 BKN020",
+                EvoChunk = "FM081200 03018G27KT 7000 -SN OVC015 PROB40 0810/0910 BK025",
+                Type = "FM",
+                Probability = string.Empty,
+                FromDay = 8,
+                FromTime = "12:00 UTC",
+                ToDay = null,
+                ToTime = string.Empty,
+                Element = new Element()
+                {
+                    WindDirection = 30,
+                    WindSpeed = 18,
+                    Visibility = 7000,
+                    Cavok = false,
+                    Greater = false,
+                    WeatherPhenomena = new List<string>() { "SN" },
+                    WeatherIntensity = "-",
+                    WeatherDesc = string.Empty,
+                    CloudsAmount = CloudAmount.OVC,
+                    CloudsBaseHeight = 1500,
+                    MinimumTemperatureValue = null,
+                    MaximumTemperatureValue = null,
+                    EmbEvolutionType = null,
+                }
+            },
         };
     }
 
@@ -54,14 +273,19 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         public bool Strict { get; set; }
         public string Base { get; set; }
         public string EvoChunk { get; set; }
-        public string Chunk { get; set; }
+        //public string Chunk { get; set; }
         public string Type { get; set; }
         public string Probability { get; set; }
-        public int FromDay { get; set; }
+        public int? FromDay { get; set; }
         public string FromTime { get; set; }
-        public int ToDay { get; set; }
+        public int? ToDay { get; set; }
         public string ToTime { get; set; }
-        public List<Element> Elements { get; set; }
+        public Element Element { get; set; }
+
+        public override string ToString()
+        {
+            return Base + "/" + EvoChunk;
+        }
     }
 
     public class Element

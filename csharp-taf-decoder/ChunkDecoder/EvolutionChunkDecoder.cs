@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 namespace csharp_taf_decoder.chunkdecoder
 {
@@ -16,7 +17,7 @@ namespace csharp_taf_decoder.chunkdecoder
         private const string RestPattern = "(.*)";
 
         public bool WithCavok { get; private set; }
-        public bool IsStrict { get; private set; }
+        public bool IsStrict { get; set; }
         public string Remaining { get; private set; }
         public override string GetRegex()
         {
@@ -42,7 +43,7 @@ namespace csharp_taf_decoder.chunkdecoder
         {
             var consumed = Consume(remainingTaf);
             var found = consumed.Value;
-            
+
             if (found.Count <= 1)
             {
                 // the first chunk didn't match anything, so we remove it to avoid an infinite loop
@@ -117,25 +118,25 @@ namespace csharp_taf_decoder.chunkdecoder
                         entityName = item.Key;
                         break;
                     }
-                    //var entityName = current(array_keys(result));
-                    if (entityName == "cavok")
+
+                    if (entityName == VisibilityChunkDecoder.CavokParameterName)
                     {
                         if (result[entityName] is bool && (bool)result[entityName])
                         {
                             WithCavok = true;
                         }
-                        entityName = "visibility";
+                        entityName = VisibilityChunkDecoder.VisibilityParameterName;
                     }
                     var entity = result[entityName];
-                    if (entity == null && entityName != "visibility")
+                    if (entity == null && entityName != VisibilityChunkDecoder.VisibilityParameterName)
                     {
                         // visibility will be null if cavok is true but we still want to add the evolution
                         throw new TafChunkDecoderException(chunk, remainingEvo, "Bad format for weather evolution", this);
                     }
-                    if (entityName == "maxTemperature")
+                    if (entityName == TemperatureChunkDecoder.MaximumTemperatureParameterName)
                     {
-                        AddEvolution(evolution, decodedTaf, result, "maxTemperature");
-                        AddEvolution(evolution, decodedTaf, result, "minTemperature");
+                        AddEvolution(evolution, decodedTaf, result, TemperatureChunkDecoder.MaximumTemperatureParameterName);
+                        AddEvolution(evolution, decodedTaf, result, TemperatureChunkDecoder.MinimumTemperatureParameterName);
                     }
                     else
                     {
@@ -214,20 +215,16 @@ namespace csharp_taf_decoder.chunkdecoder
             newEvolution.Entity = result[entityName];
 
             // possibly add cavok to it
-            if (entityName == "visibility" && WithCavok)
+            if (entityName == VisibilityChunkDecoder.VisibilityParameterName && WithCavok)
             {
                 newEvolution.Cavok = true;
             }
 
             // get the original entity from the decoded taf or a new one decoded taf doesn't contain it yet
-            var decodedEntityValue = typeof(DecodedTaf).GetProperty(entityName).GetValue(decodedTaf).ToString();
-            AbstractEntity decodedEntity = null;
+            var decodedEntityValue = typeof(DecodedTaf).GetProperty(entityName).GetValue(decodedTaf);//.ToString().Split('.');
+            AbstractEntity decodedEntity = new AbstractEntity();
 
-            //var        getter_name = "get".ucfirst(entityName);
-            //var        setter_name = "set".ucfirst(entityName);
-            //var        decoded_entity = decodedTaf.$getter_name();
-
-            if (string.IsNullOrEmpty(decodedEntityValue) || entityName == "clouds" || entityName == "weatherPhenomenons")
+            if (decodedEntityValue != null || entityName == CloudChunkDecoder.CloudsParameterName || entityName == WeatherPhenomenonChunkDecoder.WeatherPhenomenonParameterName)
             {
                 // that entity is not in the decoded_taf yet, or it's a cloud layer which is a special case
                 decodedEntity = InstantiateEntity(entityName);
@@ -235,6 +232,26 @@ namespace csharp_taf_decoder.chunkdecoder
 
             // add the new evolution to that entity
             decodedEntity.Evolutions.Add(newEvolution);
+
+            // update the decoded taf's entity or add the new one to it
+            if (entityName == CloudChunkDecoder.CloudsParameterName)
+            {
+                decodedTaf.Clouds.Add(decodedEntity as CloudLayer);
+            }
+            else if (entityName == WeatherPhenomenonChunkDecoder.WeatherPhenomenonParameterName)
+            {
+                decodedTaf.WeatherPhenomenons.Add(decodedEntity as WeatherPhenomenon);
+            }
+            else
+            {
+                //TODO
+                decodedTaf.GetType().InvokeMember(entityName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty, Type.DefaultBinder, decodedTaf, new object[] { decodedEntity });
+                //typeof(DecodedTaf).SetProperty(entityName).GetValue(decodedTaf);
+    //            obj.GetType().InvokeMember("Name",
+    //BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty,
+    //Type.DefaultBinder, obj, "Value");
+                //decodedTaf->$setter_name($decoded_entity);
+            }
         }
 
         private AbstractEntity InstantiateEntity(string entityName)
