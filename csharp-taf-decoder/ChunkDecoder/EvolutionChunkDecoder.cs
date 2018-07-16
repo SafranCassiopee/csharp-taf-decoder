@@ -62,6 +62,7 @@ namespace csharp_taf_decoder.chunkdecoder
                 // if the line started with PROBnn it won't have been consumed and we'll find it in remaining
                 evolution.Probability = remaining.Trim();
             }
+
             // period
             if (evolutionType == "BECMG" || evolutionType == "TEMPO")
             {
@@ -76,8 +77,9 @@ namespace csharp_taf_decoder.chunkdecoder
                 evolution.FromDay = Convert.ToInt32(evolutionPeriod.Substring(0, 2));
                 evolution.FromTime = evolutionPeriod.Substring(2, 2) + ':' + evolutionPeriod.Substring(4, 2) + " UTC";
             }
+
             // rest
-            Remaining = ParseEntitiesChunk(evolution, remaining, decodedTaf);
+            remaining = ParseEntitiesChunk(evolution, remaining, decodedTaf);
             Remaining = remaining;
         }
 

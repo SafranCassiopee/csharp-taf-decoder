@@ -12,20 +12,20 @@ namespace csharp_taf_decoder.entity
         /// <summary>
         /// day when the evolution occurs (FM) or starts (BECMG/TEMPO)
         /// </summary>
-        public int FromDay { get; set; }
+        public int? FromDay { get; set; }
         /// <summary>
         /// hour and minute UTC (as string) when the evolution occurs (FM)
         /// or hour UTC (as string) when the evolution starts (BECMG/TEMPO)
         /// </summary>
-        public string FromTime { get; set; }
+        public string FromTime { get; set; } = string.Empty;
         /// <summary>
         /// day when the evolution ends (BECMG/tEMPO)
         /// </summary>
-        public int ToDay { get; set; }
+        public int? ToDay { get; set; }
         /// <summary>
         /// hour UTC (as string) when the evolution ends (BECMG/TEMPO)
         /// </summary>
-        public string ToTime { get; set; }
+        public string ToTime { get; set; } = string.Empty;
 
         public object Entity { get; set; }
 

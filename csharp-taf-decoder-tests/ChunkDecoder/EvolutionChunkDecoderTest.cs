@@ -68,21 +68,21 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             if (chunk.Element.CloudsBaseHeight.HasValue)
             {
                 //TODO
-                //// 1 instead of 0 because each evo is considered a new layer
-                //var cloudsEvolutions = clouds[1].Evolutions;
-                //Assert.AreEqual(chunk.Type, cloudsEvolutions[0].Type);
-                //var cloudsEvolution = cloudsEvolutions[0];
-                //var cloudsLayers = cloudsEvolution.Entity as List<CloudLayer>;
-                //Assert.AreEqual(chunk.Element.CloudsAmount, cloudsLayers[0].Amount);
-                //Assert.AreEqual(chunk.Element.CloudsBaseHeight, cloudsLayers[0].BaseHeight.ActualValue);
+                // 1 instead of 0 because each evo is considered a new layer
+                var cloudsEvolutions = clouds[1].Evolutions;
+                Assert.AreEqual(chunk.Type, cloudsEvolutions[0].Type);
+                var cloudsEvolution = cloudsEvolutions[0];
+                var cloudsLayers = cloudsEvolution.Entity as List<CloudLayer>;
+                Assert.AreEqual(chunk.Element.CloudsAmount, cloudsLayers[0].Amount);
+                Assert.AreEqual(chunk.Element.CloudsBaseHeight, cloudsLayers[0].BaseHeight.ActualValue);
             }
             if (chunk.Element.MinimumTemperatureValue.HasValue)
             {
                 //TODO
-                //var minTemps = decodedTaf.MinimumTemperature.Evolutions;
-                //var maxTemps = decodedTaf.MaximumTemperature.Evolutions;
-                //Assert.AreEqual(chunk.Element.MinimumTemperatureValue, (minTemps[0].Entity as Temperature).TemperatureValue.ActualValue);
-                //Assert.AreEqual(chunk.Element.MaximumTemperatureValue, (maxTemps[0].Entity as Temperature).TemperatureValue.ActualValue);
+                var minTemps = decodedTaf.MinimumTemperature.Evolutions;
+                var maxTemps = decodedTaf.MaximumTemperature.Evolutions;
+                Assert.AreEqual(chunk.Element.MinimumTemperatureValue, (minTemps[0].Entity as Temperature).TemperatureValue.ActualValue);
+                Assert.AreEqual(chunk.Element.MaximumTemperatureValue, (maxTemps[0].Entity as Temperature).TemperatureValue.ActualValue);
             }
         }
         public static List<EvolutionChunkDecoderTester> Chunks => new List<EvolutionChunkDecoderTester>()
@@ -273,7 +273,6 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         public bool Strict { get; set; }
         public string Base { get; set; }
         public string EvoChunk { get; set; }
-        //public string Chunk { get; set; }
         public string Type { get; set; }
         public string Probability { get; set; }
         public int? FromDay { get; set; }
@@ -284,7 +283,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
 
         public override string ToString()
         {
-            return Base + "/" + EvoChunk;
+            return $"{Base}/{EvoChunk}";;
         }
     }
 
