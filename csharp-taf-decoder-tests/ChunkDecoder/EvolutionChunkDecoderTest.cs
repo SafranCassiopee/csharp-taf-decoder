@@ -22,9 +22,11 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             evoDecoder.IsStrict = chunk.Strict;
             evoDecoder.Parse(chunk.EvoChunk + " END", decodedTaf);
 
-            var windEvolutions = decodedTaf.SurfaceWind.Evolutions;
+            var windEvolutions = decodedTaf?.SurfaceWind?.Evolutions;
+            Assert.IsNotNull(windEvolutions);
             if (windEvolutions.Count == 0)
             {
+                Assert.Fail("No wind evolution!");
                 return;
             }
             // global evolution attributes (no point testing them in each evolution as they never change)
@@ -46,6 +48,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             Assert.AreEqual(chunk.Element.WindSpeed, (windEvolutions[0].Entity as SurfaceWind).MeanSpeed.ActualValue);
 
             var visiEvolutions = decodedTaf.Visibility.Evolutions;
+            Assert.IsNotNull(visiEvolutions);
             Assert.AreEqual(chunk.Element.Cavok, visiEvolutions[0].Cavok);
             if (!visiEvolutions[0].Cavok)
             {
@@ -55,6 +58,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             }
             if (chunk.Element.WeatherPhenomena.Count > 0)
             {
+                Assert.AreEqual(chunk.Element.WeatherPhenomena.Count, decodedTaf.WeatherPhenomenons.Count);
                 if (decodedTaf.WeatherPhenomenons.Count > 0)
                 {
                     var proxyWeatherPhenomena = decodedTaf.WeatherPhenomenons;
@@ -147,7 +151,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                 }
             },
 
-            // embedded evolutions
+            /// embedded evolutions
             new EvolutionChunkDecoderTester()
             {
                 Strict = true,
