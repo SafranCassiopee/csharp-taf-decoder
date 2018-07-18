@@ -12,9 +12,11 @@ namespace csharp_taf_decoder.chunkdecoder
     /// </summary>
     public sealed class EvolutionChunkDecoder : TafChunkDecoder
     {
-        private const string TypePattern = "(BECMG\\s+|TEMPO\\s+|FM|PROB[034]{2}\\s+){1}";
+        private const string TypePattern = "(BECMG\\s+|TEMPO\\s+|FM|PROB[34]0\\s+){1}";
         private const string PeriodPattern = "([0-9]{4}/[0-9]{4}\\s+|[0-9]{6}\\s+){1}";
         private const string RestPattern = "(.*)";
+
+        private const string ProbabilityPattern = @"^(PROB[34]0\s+){1}(TEMPO\s+){0,1}([0-9]{4}/[0-9]{4}){0,1}(.*)";
 
         public bool WithCavok { get; private set; }
         public bool IsStrict { get; set; }
@@ -47,8 +49,7 @@ namespace csharp_taf_decoder.chunkdecoder
             if (found.Count <= 1)
             {
                 // the first chunk didn't match anything, so we remove it to avoid an infinite loop
-                // note: regex approach wasn't working
-                Remaining = remainingTaf.Substring(remainingTaf.IndexOfAny(new char[] { ' ', '\r', '\n' }) + 1);
+                Remaining = ConsumeOneChunk(remainingTaf);
                 return;
             }
 
@@ -162,7 +163,7 @@ namespace csharp_taf_decoder.chunkdecoder
                         {
                             // we tried all the chunk decoders on the first chunk and none of them got a match,
                             // so we drop it
-                            remainingEvo = Regex.Replace(remainingEvo, "(\\S+\\s+)", string.Empty);
+                            remainingEvo = ConsumeOneChunk(remainingEvo);
                         }
                     }
                 }
@@ -172,9 +173,7 @@ namespace csharp_taf_decoder.chunkdecoder
 
         private string ProbabilityChunkDecoder(Evolution evolution, string chunk, DecodedTaf decodedTaf)
         {
-            var regexp = "^(PROB[034]{2}\\s+){1}(TEMPO\\s+){0,1}([0-9]{4}/[0-9]{4}){0,1}(.*)";
-
-            var match = Regex.Match(regexp, chunk);
+            var match = Regex.Match(chunk, ProbabilityPattern);
             if (!match.Success)
             {
                 return chunk;
@@ -226,7 +225,7 @@ namespace csharp_taf_decoder.chunkdecoder
 
             // get the original entity from the decoded taf or a new one decoded taf doesn't contain it yet
             var decodedEntityValue = typeof(DecodedTaf).GetProperty(entityName).GetValue(decodedTaf);
-            AbstractEntity decodedEntity = InstantiateEntity(entityName);
+            var decodedEntity = InstantiateEntity(entityName);
 
             //if (decodedEntityValue != null || entityName == CloudChunkDecoder.CloudsParameterName || entityName == WeatherPhenomenonChunkDecoder.WeatherPhenomenonParameterName)
             //{
@@ -257,15 +256,8 @@ namespace csharp_taf_decoder.chunkdecoder
                 }
                 catch (Exception ex)
                 {
-
                     throw;
                 }
-
-                //typeof(DecodedTaf).SetProperty(entityName).GetValue(decodedTaf);
-                //            obj.GetType().InvokeMember("Name",
-                //BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty,
-                //Type.DefaultBinder, obj, "Value");
-                //decodedTaf->$setter_name($decoded_entity);
             }
         }
 

@@ -24,6 +24,24 @@ namespace csharp_taf_decoder.chunkdecoder
             return new KeyValuePair<string, List<Group>>(newRemainingTaf, groups);
         }
 
+        /// <summary>
+        /// Consume one chunk blindly, without looking for the specific pattern (only whitespace).
+        /// </summary>
+        /// <param name="remainingTaf"></param>
+        /// <returns></returns>
+        public static string ConsumeOneChunk(string remainingTaf)
+        {
+            var nextSpace = remainingTaf.IndexOf(" ");
+            if (nextSpace > 0)
+            {
+                return remainingTaf.Substring(nextSpace + 1);
+            }
+            else
+            {
+                return remainingTaf;
+            }
+        }
+
         protected Dictionary<string, object> GetResults(string newRemainingTaf, Dictionary<string, object> result)
         {
             //return result + remaining taf

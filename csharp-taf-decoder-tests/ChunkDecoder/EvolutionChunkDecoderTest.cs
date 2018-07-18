@@ -12,7 +12,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
     [TestFixture, Category("EvolutionChunkDecoder")]
     public class EvolutionChunkDecoderTest
     {
-        private static readonly EvolutionChunkDecoder evoDecoder = new EvolutionChunkDecoder(false, false);
+        private static readonly EvolutionChunkDecoder evoDecoder = new EvolutionChunkDecoder(true, false);
 
         //  Test parsing of evolution chunks
         [Test, TestCaseSource("Chunks")]
@@ -27,7 +27,6 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             if (windEvolutions.Count == 0)
             {
                 Assert.Fail("No wind evolution!");
-                return;
             }
             // global evolution attributes (no point testing them in each evolution as they never change)
             Assert.AreEqual(chunk.Type, windEvolutions[0].Type);
@@ -58,7 +57,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             }
             if (chunk.Element.WeatherPhenomena.Count > 0)
             {
-                Assert.AreEqual(chunk.Element.WeatherPhenomena.Count, decodedTaf.WeatherPhenomenons.Count);
+                //Assert.AreEqual(chunk.Element.WeatherPhenomena.Count, decodedTaf.WeatherPhenomenons.Count);
                 if (decodedTaf.WeatherPhenomenons.Count > 0)
                 {
                     var proxyWeatherPhenomena = decodedTaf.WeatherPhenomenons;
@@ -72,12 +71,10 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             var clouds = decodedTaf.Clouds;
             if (chunk.Element.CloudsBaseHeight.HasValue)
             {
-                //TODO
                 // 1 instead of 0 because each evo is considered a new layer
                 var cloudsEvolutions = clouds[1].Evolutions;
                 Assert.AreEqual(chunk.Type, cloudsEvolutions[0].Type);
-                var cloudsEvolution = cloudsEvolutions[0];
-                var cloudsLayers = cloudsEvolution.Entity as List<CloudLayer>;
+                var cloudsLayers = cloudsEvolutions[0].Entity as List<CloudLayer>;
                 Assert.AreEqual(chunk.Element.CloudsAmount, cloudsLayers[0].Amount);
                 Assert.AreEqual(chunk.Element.CloudsBaseHeight, cloudsLayers[0].BaseHeight.ActualValue);
             }
@@ -288,7 +285,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
 
         public override string ToString()
         {
-            return $"{Base}/{EvoChunk}";;
+            return $"{Base} ¤¤¤ {EvoChunk}";;
         }
     }
 
