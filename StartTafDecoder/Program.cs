@@ -49,17 +49,17 @@ namespace StartTafDecoder
                 else if (value is SurfaceWind)
                 {
                     var surfaceWind = value as SurfaceWind;
-                    Display(surfaceWind, prefix + "SurfaceWind.");
+                    Display(surfaceWind, prefix + descriptor.Name + ".");
                 }
                 else if (value is Visibility)
                 {
                     var visibility = value as Visibility;
-                    Display(visibility, prefix + "Visibility.");
+                    Display(visibility, prefix + descriptor.Name + ".");
                 }
                 else if (value is ForecastPeriod)
                 {
                     var forecastPeriod = value as ForecastPeriod;
-                    Display(forecastPeriod, prefix + "ForecastPeriod.");
+                    Display(forecastPeriod, prefix + descriptor.Name + ".");
                 }
                 else if (value is Temperature)
                 {
@@ -69,26 +69,36 @@ namespace StartTafDecoder
                 else if (value is List<WeatherPhenomenon>)
                 {
                     var listPresentWeather = value as List<WeatherPhenomenon>;
-                    foreach (var presentWeather in listPresentWeather)
+                    if (listPresentWeather.Count == 0) Console.WriteLine($"{prefix}{descriptor.Name}=<empty>");
+                    for (int i = 0; i < listPresentWeather.Count; i++)
                     {
-                        Display(presentWeather, prefix + "WeatherPhenomenon.");
+                        var presentWeather = listPresentWeather[i];
+                        Display(presentWeather, $"{prefix}{descriptor.Name}[{i}].");
                     }
                 }
                 else if (value is List<Evolution>)
                 {
                     var listEvolution = value as List<Evolution>;
-                    foreach (var evolution in listEvolution)
+                    if (listEvolution.Count == 0) Console.WriteLine($"{prefix}{descriptor.Name}=<empty>");
+                    for (int i = 0; i < listEvolution.Count; i++)
                     {
-                        Display(evolution, prefix + "PresentWeather.");
+                        var evolution = listEvolution[i];
+                        Display(evolution, $"{prefix}{descriptor.Name}[{i}].");
                     }
                 }
                 else if (value is List<CloudLayer>)
                 {
                     var listCloud = value as List<CloudLayer>;
-                    foreach (var cloud in listCloud)
+                    if (listCloud.Count == 0) Console.WriteLine($"{prefix}{descriptor.Name}=<empty>");
+                    for (int i = 0; i < listCloud.Count; i++)
                     {
-                        Display(cloud, prefix + "Cloud.");
+                        var cloud = listCloud[i];
+                        Display(cloud, $"{prefix}{descriptor.Name}[{i}].");
                     }
+                }
+                else if (value is List<string>)
+                {
+                    Console.WriteLine($"{prefix}{descriptor.Name}={string.Join(", ", value as List<string>)}");
                 }
                 else
                 {
