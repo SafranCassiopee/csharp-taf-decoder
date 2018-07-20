@@ -53,16 +53,16 @@ namespace csharp_metar_decoder_tests
         {
             return new List<Tuple<float, Value.Unit, float, Value.Unit>>()
             {
-                new Tuple<float, Value.Unit, float, Value.Unit>(1000f, Value.Unit.HectoPascal, 29.53f, Value.Unit.MercuryInch),
-                new Tuple<float, Value.Unit, float, Value.Unit>(2.02f, Value.Unit.MercuryInch, 68.405f, Value.Unit.HectoPascal),
-                new Tuple<float, Value.Unit, float, Value.Unit>(800f, Value.Unit.Meter, 2624.672f, Value.Unit.Feet),
-                new Tuple<float, Value.Unit, float, Value.Unit>(5000f, Value.Unit.Feet, 1524f, Value.Unit.Meter),
-                new Tuple<float, Value.Unit, float, Value.Unit>(2500f, Value.Unit.Meter, 1.553f, Value.Unit.StatuteMile),
-                new Tuple<float, Value.Unit, float, Value.Unit>(1f, Value.Unit.MeterPerSecond, 1.944f, Value.Unit.Knot),
-                new Tuple<float, Value.Unit, float, Value.Unit>(99f, Value.Unit.Knot, 50.93f, Value.Unit.MeterPerSecond),
-                new Tuple<float, Value.Unit, float, Value.Unit>(3f, Value.Unit.KilometerPerHour, 1.620f, Value.Unit.Knot),
-                new Tuple<float, Value.Unit, float, Value.Unit>(500f, Value.Unit.Meter, 500f, Value.Unit.Meter),
-                new Tuple<float, Value.Unit, float, Value.Unit>(50f, Value.Unit.Feet, 50f, Value.Unit.Feet),
+                new Tuple<float, Value.Unit, float, Value.Unit>(1000f,  Value.Unit.HectoPascal,         29.53f, Value.Unit.MercuryInch),
+                new Tuple<float, Value.Unit, float, Value.Unit>(2.02f,  Value.Unit.MercuryInch,        68.405f, Value.Unit.HectoPascal),
+                new Tuple<float, Value.Unit, float, Value.Unit>(800f,   Value.Unit.Meter,            2624.672f, Value.Unit.Feet),
+                new Tuple<float, Value.Unit, float, Value.Unit>(5000f,  Value.Unit.Feet,                 1524f, Value.Unit.Meter),
+                new Tuple<float, Value.Unit, float, Value.Unit>(2500f,  Value.Unit.Meter,               1.553f, Value.Unit.StatuteMile),
+                new Tuple<float, Value.Unit, float, Value.Unit>(1f,     Value.Unit.MeterPerSecond,      1.944f, Value.Unit.Knot),
+                new Tuple<float, Value.Unit, float, Value.Unit>(99f,    Value.Unit.Knot,                50.93f, Value.Unit.MeterPerSecond),
+                new Tuple<float, Value.Unit, float, Value.Unit>(3f,     Value.Unit.KilometerPerHour,    1.620f, Value.Unit.Knot),
+                new Tuple<float, Value.Unit, float, Value.Unit>(500f,   Value.Unit.Meter,                 500f, Value.Unit.Meter),
+                new Tuple<float, Value.Unit, float, Value.Unit>(50f,    Value.Unit.Feet,                   50f, Value.Unit.Feet),
             };
         }
 

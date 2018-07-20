@@ -2,10 +2,7 @@
 using csharp_taf_decoder.chunkdecoder;
 using csharp_taf_decoder.entity;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using static csharp_taf_decoder.entity.CloudLayer;
-using static csharp_taf_decoder.entity.Evolution;
 
 namespace csharp_taf_decoder_tests.ChunkDecoder
 {
@@ -57,7 +54,6 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             }
             if (chunk.Element.WeatherPhenomena.Count > 0)
             {
-                //Assert.AreEqual(chunk.Element.WeatherPhenomena.Count, decodedTaf.WeatherPhenomenons.Count);
                 if (decodedTaf.WeatherPhenomenons.Count > 0)
                 {
                     var proxyWeatherPhenomena = decodedTaf.WeatherPhenomenons;
@@ -111,7 +107,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                     WeatherPhenomena = new List<string>() { "RA" },
                     WeatherIntensity = "+",
                     WeatherDesc = "SH",
-                    CloudsAmount = CloudAmount.BKN ,
+                    CloudsAmount = CloudLayer.CloudAmount.BKN,
                     CloudsBaseHeight = 2500,
                     MinimumTemperatureValue = -1,
                     MaximumTemperatureValue = 8,
@@ -141,7 +137,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                     WeatherPhenomena = new List<string>(),
                     WeatherIntensity = string.Empty,
                     WeatherDesc = string.Empty,
-                    CloudsAmount = CloudAmount.BKN,
+                    CloudsAmount = CloudLayer.CloudAmount.BKN,
                     CloudsBaseHeight = 2500,
                     MinimumTemperatureValue = null,
                     MaximumTemperatureValue = null,
@@ -171,7 +167,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                     WeatherPhenomena = new List<string>(),
                     WeatherIntensity = string.Empty,
                     WeatherDesc = string.Empty,
-                    CloudsAmount = CloudAmount.NULL,
+                    CloudsAmount = CloudLayer.CloudAmount.NULL,
                     CloudsBaseHeight = null,
                     MinimumTemperatureValue = null,
                     MaximumTemperatureValue = null,
@@ -201,7 +197,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                     WeatherPhenomena = new List<string>(),
                     WeatherIntensity = string.Empty,
                     WeatherDesc = string.Empty,
-                    CloudsAmount = CloudAmount.NULL,
+                    CloudsAmount = CloudLayer.CloudAmount.NULL,
                     CloudsBaseHeight = null,
                     MinimumTemperatureValue = null,
                     MaximumTemperatureValue = null,
@@ -231,7 +227,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                     WeatherPhenomena = new List<string>() { "SN" },
                     WeatherIntensity = "-",
                     WeatherDesc = string.Empty,
-                    CloudsAmount = CloudAmount.OVC,
+                    CloudsAmount = CloudLayer.CloudAmount.OVC,
                     CloudsBaseHeight = 1500,
                     MinimumTemperatureValue = null,
                     MaximumTemperatureValue = null,
@@ -261,7 +257,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                     WeatherPhenomena = new List<string>() { "SN" },
                     WeatherIntensity = "-",
                     WeatherDesc = string.Empty,
-                    CloudsAmount = CloudAmount.OVC,
+                    CloudsAmount = CloudLayer.CloudAmount.OVC,
                     CloudsBaseHeight = 1500,
                     MinimumTemperatureValue = null,
                     MaximumTemperatureValue = null,
@@ -301,7 +297,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         public List<string> WeatherPhenomena { get; set; } = new List<string>();
         public string WeatherIntensity { get; set; }
         public string WeatherDesc { get; set; }
-        public CloudAmount CloudsAmount { get; set; }
+        public CloudLayer.CloudAmount CloudsAmount { get; set; }
         public int? CloudsBaseHeight { get; set; }
         public int? MinimumTemperatureValue { get; set; }
         public int? MaximumTemperatureValue { get; set; }

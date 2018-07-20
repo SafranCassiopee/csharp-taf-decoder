@@ -4,7 +4,6 @@ using csharp_taf_decoder.entity;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using static csharp_taf_decoder.entity.Value;
 
 namespace csharp_taf_decoder_tests.ChunkDecoder
 {
@@ -26,12 +25,12 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
 
             Assert.AreEqual("TN", minimumTemperature.Type);
             Assert.AreEqual(chunk.Item2, minimumTemperature.TemperatureValue.ActualValue);
-            Assert.AreEqual(Unit.DegreeCelsius, minimumTemperature.TemperatureValue.ActualUnit);
+            Assert.AreEqual(Value.Unit.DegreeCelsius, minimumTemperature.TemperatureValue.ActualUnit);
             Assert.AreEqual(chunk.Item3, minimumTemperature.Day);
             Assert.AreEqual(chunk.Item4, minimumTemperature.Hour);
             Assert.AreEqual("TX", maximumTemperature.Type);
             Assert.AreEqual(chunk.Item5, maximumTemperature.TemperatureValue.ActualValue);
-            Assert.AreEqual(Unit.DegreeCelsius, maximumTemperature.TemperatureValue.ActualUnit);
+            Assert.AreEqual(Value.Unit.DegreeCelsius, maximumTemperature.TemperatureValue.ActualUnit);
             Assert.AreEqual(chunk.Item6, maximumTemperature.Day);
             Assert.AreEqual(chunk.Item7, maximumTemperature.Hour);
         }

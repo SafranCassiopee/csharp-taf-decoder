@@ -4,7 +4,6 @@ using csharp_taf_decoder.entity;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using static csharp_taf_decoder.entity.Value;
 
 namespace csharp_taf_decoder_tests.ChunkDecoder
 {
@@ -18,7 +17,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         /// </summary>
         /// <param name="chunk"></param>
         [Test, TestCaseSource("ValidChunks")]
-        public void TestParse(Tuple<string, bool, bool, double?, Unit, string> chunk)
+        public void TestParse(Tuple<string, bool, bool, double?, Value.Unit, string> chunk)
         {
             var decoded = chunkDecoder.Parse(chunk.Item1);
 
@@ -58,15 +57,15 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         }
 
 
-        public static List<Tuple<string, bool, bool, double?, Unit, string>> ValidChunks => new List<Tuple<string, bool, bool, double?, Unit, string>>()
+        public static List<Tuple<string, bool, bool, double?, Value.Unit, string>> ValidChunks => new List<Tuple<string, bool, bool, double?, Value.Unit, string>>()
         {
-            new Tuple<string, bool, bool, double?, Unit, string>("0200 AAA", false, false, 200, Unit.Meter, "AAA"),
-            new Tuple<string, bool, bool, double?, Unit, string>("CAVOK BBB", true, false, null, Unit.Meter, "BBB"),
-            new Tuple<string, bool, bool, double?, Unit, string>("8000 CCC", false, false, 8000, Unit.Meter, "CCC"),
-            new Tuple<string, bool, bool, double?, Unit, string>("P6SM DDD", false, true, 6, Unit.StatuteMile, "DDD"),
-            new Tuple<string, bool, bool, double?, Unit, string>("6 1/4SM EEE", false, false, 6.25, Unit.StatuteMile, "EEE"),
-            new Tuple<string, bool, bool, double?, Unit, string>("P6 1/4SM FFF", false, true, 6.25, Unit.StatuteMile, "FFF"),
-            new Tuple<string, bool, bool, double?, Unit, string>("//// HHH", false, false, null, Unit.None, "HHH"),
+            new Tuple<string, bool, bool, double?, Value.Unit, string>("0200 AAA",      false, false,    200, Value.Unit.Meter,         "AAA"),
+            new Tuple<string, bool, bool, double?, Value.Unit, string>("CAVOK BBB",     true, false,    null, Value.Unit.Meter,         "BBB"),
+            new Tuple<string, bool, bool, double?, Value.Unit, string>("8000 CCC",      false, false,   8000, Value.Unit.Meter,         "CCC"),
+            new Tuple<string, bool, bool, double?, Value.Unit, string>("P6SM DDD",      false, true,       6, Value.Unit.StatuteMile,   "DDD"),
+            new Tuple<string, bool, bool, double?, Value.Unit, string>("6 1/4SM EEE",   false, false,   6.25, Value.Unit.StatuteMile,   "EEE"),
+            new Tuple<string, bool, bool, double?, Value.Unit, string>("P6 1/4SM FFF",  false, true,    6.25, Value.Unit.StatuteMile,   "FFF"),
+            new Tuple<string, bool, bool, double?, Value.Unit, string>("//// HHH",      false, false,   null, Value.Unit.None,          "HHH"),
         };
 
         public static List<string> InvalidChunks => new List<string>()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace csharp_taf_decoder.entity
 {
@@ -44,15 +43,15 @@ namespace csharp_taf_decoder.entity
         {
             return new Evolution()
             {
-                Type = this.Type,
-                FromDay = this.FromDay,
-                FromTime = this.FromTime,
-                ToDay = this.ToDay,
-                ToTime = this.ToTime,
-                Cavok = this.Cavok,
-                Probability = this.Probability,
-                Entity = this.Entity,
-                Evolutions = this.Evolutions,
+                Type = Type,
+                FromDay = FromDay,
+                FromTime = FromTime,
+                ToDay = ToDay,
+                ToTime = ToTime,
+                Cavok = Cavok,
+                Probability = Probability,
+                Entity = Entity,
+                Evolutions = Evolutions,
             };
         }
     }

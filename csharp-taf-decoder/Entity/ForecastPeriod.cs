@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace csharp_taf_decoder.entity
+﻿namespace csharp_taf_decoder.entity
 {
     public sealed class ForecastPeriod
     {

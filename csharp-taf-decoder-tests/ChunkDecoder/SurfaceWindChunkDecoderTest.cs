@@ -69,7 +69,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         public static void TestEmptyInformationChunk()
         {
             Dictionary<string, object> decoded = null;
-            var exception = Assert.Throws(typeof(TafChunkDecoderException), () =>
+            var exception = Assert.Throws(typeof(TafChunkDecoderException), () =>   
             {
                 decoded = chunkDecoder.Parse("/////KT PPP");
             }) as TafChunkDecoderException;

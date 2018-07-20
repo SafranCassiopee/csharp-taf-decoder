@@ -1,5 +1,4 @@
 ﻿using csharp_taf_decoder.entity;
-using System;
 using System.Collections.Generic;
 
 namespace csharp_taf_decoder.chunkdecoder

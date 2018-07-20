@@ -46,7 +46,6 @@
     <Compile Include="ChunkDecoder\EvolutionChunkDecoder.cs" />
     <Compile Include="ChunkDecoder\ForecastPeriodChunkDecoder.cs" />
     <Compile Include="ChunkDecoder\WeatherChunkDecoder.cs" />
-    <Compile Include="Cloner.cs" />
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\Evolution.cs" />
     <Compile Include="Entity\ForecastPeriod.cs" />

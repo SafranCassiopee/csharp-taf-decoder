@@ -1,10 +1,8 @@
 ﻿using csharp_taf_decoder;
 using csharp_taf_decoder.chunkdecoder;
-using csharp_taf_decoder.entity;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using static csharp_taf_decoder.entity.DecodedTaf;
 
 namespace csharp_taf_decoder_tests.ChunkDecoder
 {
@@ -14,20 +12,20 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         private static readonly ReportTypeChunkDecoder chunkDecoder = new ReportTypeChunkDecoder();
 
         [Test, TestCaseSource("ValidChunks")]
-        public void TestParse(Tuple<string, TafType, string> chunk)
+        public void TestParse(Tuple<string, csharp_taf_decoder.entity.DecodedTaf.TafType, string> chunk)
         {
             var decoded = chunkDecoder.Parse(chunk.Item1);
             Assert.AreEqual(chunk.Item2, (decoded[TafDecoder.ResultKey] as Dictionary<string, object>)[ReportTypeChunkDecoder.TypeParameterName]);
             Assert.AreEqual(chunk.Item3, decoded[TafDecoder.RemainingTafKey]);
         }
-        public static List<Tuple<string, TafType, string>> ValidChunks => new List<Tuple<string, TafType, string>>()
+        public static List<Tuple<string, csharp_taf_decoder.entity.DecodedTaf.TafType, string>> ValidChunks => new List<Tuple<string, csharp_taf_decoder.entity.DecodedTaf.TafType, string>>()
         {
-            new Tuple<string, TafType, string>("TAF LFPG", TafType.TAF, "LFPG"),
-            new Tuple<string, TafType, string>("TAF TAF LFPG", TafType.TAF, "LFPG"),
-            new Tuple<string, TafType, string>("TAF AMD LFPO",TafType.TAFAMD, "LFPO"),
-            new Tuple<string, TafType, string>("TA LFPG", TafType.NULL, "TA LFPG"),
-            new Tuple<string, TafType, string>("123 LFPO", TafType.NULL, "123 LFPO"),
-            new Tuple<string, TafType, string>("TAF COR LFPO", TafType.TAFCOR, "LFPO"),
+            new Tuple<string, csharp_taf_decoder.entity.DecodedTaf.TafType, string>("TAF LFPG",     csharp_taf_decoder.entity.DecodedTaf.TafType.TAF,       "LFPG"),
+            new Tuple<string, csharp_taf_decoder.entity.DecodedTaf.TafType, string>("TAF TAF LFPG", csharp_taf_decoder.entity.DecodedTaf.TafType.TAF,       "LFPG"),
+            new Tuple<string, csharp_taf_decoder.entity.DecodedTaf.TafType, string>("TAF AMD LFPO", csharp_taf_decoder.entity.DecodedTaf.TafType.TAFAMD,    "LFPO"),
+            new Tuple<string, csharp_taf_decoder.entity.DecodedTaf.TafType, string>("TA LFPG",      csharp_taf_decoder.entity.DecodedTaf.TafType.NULL,      "TA LFPG"),
+            new Tuple<string, csharp_taf_decoder.entity.DecodedTaf.TafType, string>("123 LFPO",     csharp_taf_decoder.entity.DecodedTaf.TafType.NULL,      "123 LFPO"),
+            new Tuple<string, csharp_taf_decoder.entity.DecodedTaf.TafType, string>("TAF COR LFPO", csharp_taf_decoder.entity.DecodedTaf.TafType.TAFCOR,    "LFPO"),
         };
     }
 }

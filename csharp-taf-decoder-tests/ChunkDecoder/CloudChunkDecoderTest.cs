@@ -4,7 +4,6 @@ using csharp_taf_decoder.entity;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using static csharp_taf_decoder.entity.CloudLayer;
 
 namespace csharp_taf_decoder_tests.ChunkDecoder
 {
@@ -17,7 +16,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         /// Test parsing of valid cloud chunks
         /// </summary>
         [Test, TestCaseSource("ValidChunks")]
-        public static void TestParse(Tuple<string, int, CloudAmount, int?, CloudType, string> chunk)
+        public static void TestParse(Tuple<string, int, CloudLayer.CloudAmount, int?, CloudLayer.CloudType, string> chunk)
         {
             var decoded = chunkDecoder.Parse(chunk.Item1);
             var clouds = (decoded[TafDecoder.ResultKey] as Dictionary<string, object>)[CloudChunkDecoder.CloudsParameterName] as List<CloudLayer>;
@@ -69,14 +68,14 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             });
         }
 
-        public static List<Tuple<string, int, CloudAmount, int?, CloudType, string>> ValidChunks => new List<Tuple<string, int, CloudAmount, int?, CloudType, string>>()
+        public static List<Tuple<string, int, CloudLayer.CloudAmount, int?, CloudLayer.CloudType, string>> ValidChunks => new List<Tuple<string, int, CloudLayer.CloudAmount, int?, CloudLayer.CloudType, string>>()
         {
-            new Tuple<string, int, CloudAmount, int?, CloudType, string>("VV085 AAA", 1, CloudAmount.VV, 8500, CloudType.NULL, "AAA"),
-            new Tuple<string, int, CloudAmount, int?, CloudType, string>("BKN200TCU OVC250 VV/// BBB", 3, CloudAmount.BKN, 20000, CloudType.TCU, "BBB"),
-            new Tuple<string, int, CloudAmount, int?, CloudType, string>("OVC////// FEW250 CCC", 2, CloudAmount.OVC, null, CloudType.CannotMeasure, "CCC"),
-            new Tuple<string, int, CloudAmount, int?, CloudType, string>("NSC DDD", 0, CloudAmount.NULL, null, CloudType.NULL, "DDD"),
-            new Tuple<string, int, CloudAmount, int?, CloudType, string>("SKC EEE", 0, CloudAmount.NULL, 1, CloudType.CannotMeasure, "EEE"),
-            new Tuple<string, int, CloudAmount, int?, CloudType, string>("NCD FFF", 0, CloudAmount.NULL, 1, CloudType.CannotMeasure, "FFF"),
+            new Tuple<string, int, CloudLayer.CloudAmount, int?, CloudLayer.CloudType, string>("VV085 AAA", 1, CloudLayer.CloudAmount.VV, 8500, CloudLayer.CloudType.NULL, "AAA"),
+            new Tuple<string, int, CloudLayer.CloudAmount, int?, CloudLayer.CloudType, string>("BKN200TCU OVC250 VV/// BBB", 3, CloudLayer.CloudAmount.BKN, 20000, CloudLayer.CloudType.TCU, "BBB"),
+            new Tuple<string, int, CloudLayer.CloudAmount, int?, CloudLayer.CloudType, string>("OVC////// FEW250 CCC", 2, CloudLayer.CloudAmount.OVC, null, CloudLayer.CloudType.CannotMeasure, "CCC"),
+            new Tuple<string, int, CloudLayer.CloudAmount, int?, CloudLayer.CloudType, string>("NSC DDD", 0, CloudLayer.CloudAmount.NULL, null, CloudLayer.CloudType.NULL, "DDD"),
+            new Tuple<string, int, CloudLayer.CloudAmount, int?, CloudLayer.CloudType, string>("SKC EEE", 0, CloudLayer.CloudAmount.NULL, 1, CloudLayer.CloudType.CannotMeasure, "EEE"),
+            new Tuple<string, int, CloudLayer.CloudAmount, int?, CloudLayer.CloudType, string>("NCD FFF", 0, CloudLayer.CloudAmount.NULL, 1, CloudLayer.CloudType.CannotMeasure, "FFF"),
         };
 
         public static List<string> InvalidChunks => new List<string>()

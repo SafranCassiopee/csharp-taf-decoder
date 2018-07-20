@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using static csharp_taf_decoder.entity.DecodedTaf;
 
 namespace csharp_taf_decoder.chunkdecoder
 {
@@ -22,13 +21,13 @@ namespace csharp_taf_decoder.chunkdecoder
             // handle the case where nothing has been found
             if (found.Count <= 1)
             {
-                result.Add(TypeParameterName, TafType.NULL);
+                result.Add(TypeParameterName, entity.DecodedTaf.TafType.NULL);
             }
             else
             {
                 // retrieve found params
                 // 'TAF' sometimes happens to be duplicated
-                result.Add(TypeParameterName, (TafType)Enum.Parse(typeof(TafType), found[1].Value.Replace("TAF TAF", "TAF").Replace(" ", string.Empty)));
+                result.Add(TypeParameterName, (entity.DecodedTaf.TafType)Enum.Parse(typeof(entity.DecodedTaf.TafType), found[1].Value.Replace("TAF TAF", "TAF").Replace(" ", string.Empty)));
             }
 
             return GetResults(newRemainingTaf, result);

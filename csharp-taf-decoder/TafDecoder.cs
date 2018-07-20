@@ -1,5 +1,4 @@
-﻿using csharp_taf_decoder;
-using csharp_taf_decoder.chunkdecoder;
+﻿using csharp_taf_decoder.chunkdecoder;
 using csharp_taf_decoder.entity;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -145,7 +144,6 @@ namespace csharp_taf_decoder
                 }
             }
 
-            //TODO In error Enable after EvolutionChunkDecoder implementation
             // weather evolutions
             var evolutionDecoder = new EvolutionChunkDecoder(isStrict, withCavok);
             while (!string.IsNullOrEmpty(remainingTaf) && remainingTaf.Trim() != "END")

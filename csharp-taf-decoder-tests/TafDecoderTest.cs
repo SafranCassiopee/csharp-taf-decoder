@@ -183,9 +183,9 @@ public class TafDecoderTest
     public static List<Tuple<string, Type, string>> ErrorChunks()
     {
         return new List<Tuple<string, Type, string>>() {
-                new Tuple<string, Type, string>("TAF LFPG aaa bbb cccc", typeof(DatetimeChunkDecoder), "AAA BBB CCCC END"),
-                new Tuple<string, Type, string>("TAF LFPO 231027Z NIL 1234", typeof(ForecastPeriodChunkDecoder), "NIL 1234 END"),
-                new Tuple<string, Type, string>("TAF LFPO 231027Z 2310/2411 NIL 12345", typeof(SurfaceWindChunkDecoder), "NIL 12345 END"),
+                new Tuple<string, Type, string>("TAF LFPG aaa bbb cccc",                typeof(DatetimeChunkDecoder),       "AAA BBB CCCC END"),
+                new Tuple<string, Type, string>("TAF LFPO 231027Z NIL 1234",            typeof(ForecastPeriodChunkDecoder), "NIL 1234 END"),
+                new Tuple<string, Type, string>("TAF LFPO 231027Z 2310/2411 NIL 12345", typeof(SurfaceWindChunkDecoder),    "NIL 12345 END"),
        };
     }
 }
