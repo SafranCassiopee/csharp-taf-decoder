@@ -42,9 +42,9 @@ namespace StartTafDecoder
                 var name = descriptor.Name;
                 var value = descriptor.GetValue(o);
 
-                if (value is ReadOnlyCollection<Exception>)
+                if (value is ReadOnlyCollection<TafChunkDecoderException>)
                 {
-                    Console.WriteLine($"{name}.Count={(value as ReadOnlyCollection<Exception>).Count}");
+                    Console.WriteLine($"{name}.Count={(value as ReadOnlyCollection<TafChunkDecoderException>).Count}");
                 }
                 else if (value is SurfaceWind)
                 {
@@ -56,20 +56,30 @@ namespace StartTafDecoder
                     var visibility = value as Visibility;
                     Display(visibility, prefix + "Visibility.");
                 }
-                //else if (value is List<RunwayVisualRange>)
-                //{
-                //    var listRunwayVisualRange = value as List<RunwayVisualRange>;
-                //    foreach (var runwayVisualRange in listRunwayVisualRange)
-                //    {
-                //        Display(runwayVisualRange, prefix + "RunwayVisualRange.");
-                //    }
-                //}
+                else if (value is ForecastPeriod)
+                {
+                    var forecastPeriod = value as ForecastPeriod;
+                    Display(forecastPeriod, prefix + "ForecastPeriod.");
+                }
+                else if (value is Temperature)
+                {
+                    var temperature = value as Temperature;
+                    Display(temperature, prefix + descriptor.Name + ".");
+                }
                 else if (value is List<WeatherPhenomenon>)
                 {
                     var listPresentWeather = value as List<WeatherPhenomenon>;
                     foreach (var presentWeather in listPresentWeather)
                     {
-                        Display(presentWeather, prefix + "PresentWeather.");
+                        Display(presentWeather, prefix + "WeatherPhenomenon.");
+                    }
+                }
+                else if (value is List<Evolution>)
+                {
+                    var listEvolution = value as List<Evolution>;
+                    foreach (var evolution in listEvolution)
+                    {
+                        Display(evolution, prefix + "PresentWeather.");
                     }
                 }
                 else if (value is List<CloudLayer>)
