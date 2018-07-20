@@ -37,7 +37,7 @@ StartTafDecoder requires [CommandLineParser](https://github.com/commandlineparse
 Usage:
 
 ```shell
-StartTarDecoder.exe --TAF "TAF LEMD 080500Z 0806/0912 23010KT 9999 SCT025 TX12/0816Z TN04/0807Z"
+StartTafDecoder.exe --TAF "TAF LEMD 080500Z 0806/0912 23010KT 9999 SCT025 TX12/0816Z TN04/0807Z"
 ```
 
 If you want to integrate the library easily in your project, you should consider using the official nuget package available from https://www.nuget.org/.
