@@ -11,7 +11,7 @@ namespace csharp_taf_decoder.chunkdecoder
 {
     public sealed class EvolutionChunkDecoder : TafChunkDecoder
     {
-        public const string ProbabilityParameterName = "Probability";
+        public const string Probability = "Probability";
 
         public override string GetRegex()
         {
@@ -59,13 +59,10 @@ namespace csharp_taf_decoder.chunkdecoder
             var remaining = found[3].Value;
 
             var evolution = new Evolution() { Type = evo_type };
-            //php: if (strpos($result['remaining'], 'PROB') !== false) {
-            if (remaining.StartsWith("PROB"))
+            if (newRemainingTaf.StartsWith("PROB"))
             {
                 // if the line started with PROBnn it won't have been consumed and we'll find it in remaining
-                // LDA: Je ne suis pas d'accord avec ce commentaire, ce n'est pas ce que semble faire le code PHP
-                // le code fait un "Contains" alors que le commentaire suggère un "StartsWith"
-                evolution.Probability = remaining.Trim();
+                evolution.Probability = newRemainingTaf.Trim();
             }
 
             // period
@@ -270,7 +267,7 @@ namespace csharp_taf_decoder.chunkdecoder
             {
                 // LDA: même problèmatique
                 evolution.Probability = prob;
-                var embeddedEvolution = new Evolution() { Type = !string.IsNullOrEmpty(type) ? type : ProbabilityParameterName };
+                var embeddedEvolution = new Evolution() { Type = !string.IsNullOrEmpty(type) ? type : Probability };
 
                 var periodArr = period.Split('/');
                 embeddedEvolution.FromDay = Convert.ToInt32(periodArr[0].Substring(0, 2));
