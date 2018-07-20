@@ -29,7 +29,6 @@ namespace csharp_taf_decoder.chunkdecoder
             }
 
             // default case: CAVOK or clear sky, no cloud layer
-            //..;
             var layers = new List<CloudLayer>();
 
             // there are clouds, handle cloud layers and visibility
