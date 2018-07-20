@@ -43,7 +43,7 @@ StartTafDecoder.exe --TAF "TAF LEMD 080500Z 0806/0912 23010KT 9999 SCT025 TX12/0
 If you want to integrate the library easily in your project, you should consider using the official nuget package available from https://www.nuget.org/.
 
 ```
-nuget install csharp-TAF-decoder
+nuget install csharp-taf-decoder
 ```
 
 It is not mandatory though.
@@ -62,8 +62,8 @@ nuget install csharp-taf-decoder
 Add a reference to the library, then add the following using directives:
 
 ```csharp
-using csharp_TAF_decoder;
-using csharp_TAF_decoder.entity;
+using csharp_taf_decoder;
+using csharp_taf_decoder.entity;
 ```
 
 - By hand
@@ -186,7 +186,7 @@ nuget restore csharp-taf-decoder\
 You're ready to launch the test suite with:
 
 ```shell
-nunit-console.exe /xml:results.xml csharp-taf-decoder-tests\bin\debug\csharp-TAF-decoder-tests.dll
+nunit-console.exe /xml:results.xml csharp-taf-decoder-tests\bin\debug\csharp-taf-decoder-tests.dll
 ```
 
 This library is fully unit tested, and uses [nUnit]((http://nunit.org/)) to launch the tests.
