@@ -11,7 +11,7 @@ namespace csharp_taf_decoder.chunkdecoder
         /// </summary>
         /// <param name="remainingTaf">matches array if any match (null if no match), + updated remaining taf</param>
         /// <returns></returns>
-        public KeyValuePair<string, List<Group>> Consume(string remainingTaf)
+        public  List<Group> Consume(string remainingTaf, out string newRemainingTaf)
         {
             var chunkRegex = new Regex(GetRegex());
 
@@ -19,9 +19,9 @@ namespace csharp_taf_decoder.chunkdecoder
             var groups = chunkRegex.Match(remainingTaf).Groups.Cast<Group>().ToList();
 
             // consume what has been previously found with the same regexp
-            var newRemainingTaf = chunkRegex.Replace(remainingTaf, string.Empty);
+            newRemainingTaf = chunkRegex.Replace(remainingTaf, string.Empty);
 
-            return new KeyValuePair<string, List<Group>>(newRemainingTaf, groups);
+            return groups;
         }
 
         /// <summary>

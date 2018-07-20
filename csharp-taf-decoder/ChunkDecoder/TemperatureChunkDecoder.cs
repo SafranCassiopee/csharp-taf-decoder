@@ -18,9 +18,8 @@ namespace csharp_taf_decoder.chunkdecoder
 
         public override Dictionary<string, object> Parse(string remainingTaf, bool withCavok = false)
         {
-            var consumed = Consume(remainingTaf);
-            var found = consumed.Value;
-            var newRemainingTaf = consumed.Key;
+            string newRemainingTaf;
+            var found = Consume(remainingTaf, out newRemainingTaf);
             var result = new Dictionary<string, object>();
 
             // temperatures are so often missing from forecasts we consider them as optional

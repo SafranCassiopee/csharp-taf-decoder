@@ -21,7 +21,7 @@ namespace csharp_taf_decoder
             new ForecastPeriodChunkDecoder(),
             new SurfaceWindChunkDecoder(),
             new VisibilityChunkDecoder(),
-            new WeatherPhenomenonChunkDecoder(),
+            new WeatherChunkDecoder(),
             new CloudChunkDecoder(),
             new TemperatureChunkDecoder(),
         });

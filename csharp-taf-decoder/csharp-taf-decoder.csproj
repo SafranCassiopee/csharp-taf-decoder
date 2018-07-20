@@ -32,6 +32,7 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,8 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChunkDecoder\EvolutionChunkDecoder.cs" />
+    <Compile Include="ChunkDecoder\EvolutionChunkDecoderv1.cs" />
     <Compile Include="ChunkDecoder\ForecastPeriodChunkDecoder.cs" />
-    <Compile Include="ChunkDecoder\WeatherPhenomenon.cs" />
+    <Compile Include="ChunkDecoder\WeatherChunkDecoder.cs" />
     <Compile Include="Cloner.cs" />
     <Compile Include="Entity\BaseEntity.cs" />
     <Compile Include="Entity\Evolution.cs" />

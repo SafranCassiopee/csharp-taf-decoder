@@ -23,7 +23,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             evoDecoder.Parse(chunk.EvoChunk + " END", decodedTaf);
 
             var windEvolutions = decodedTaf?.SurfaceWind?.Evolutions;
-            Assert.IsNotNull(windEvolutions);
+            Assert.IsNotNull(windEvolutions, "No surface winds!");
             if (windEvolutions.Count == 0)
             {
                 Assert.Fail("No wind evolution!");
@@ -39,8 +39,8 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             {
                 // it's embedded in the second evolution
                 Assert.LessOrEqual(2, windEvolutions.Count);
-                var emb_evolutions = windEvolutions[1].Evolutions;
-                Assert.AreEqual(chunk.Element.EmbEvolutionType, emb_evolutions[0].Type);
+                var embEvolutions = windEvolutions[1].Evolutions;
+                Assert.AreEqual(chunk.Element.EmbEvolutionType, embEvolutions[0].Type);
             }
             // surfaceWind attributes
             Assert.AreEqual(chunk.Element.WindDirection, (windEvolutions[0].Entity as SurfaceWind).MeanDirection.ActualValue);
@@ -80,7 +80,8 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
             }
             if (chunk.Element.MinimumTemperatureValue.HasValue)
             {
-                //TODO
+                Assert.IsNotNull(decodedTaf.MinimumTemperature);
+                Assert.IsNotNull(decodedTaf.MaximumTemperature);
                 var minTemps = decodedTaf.MinimumTemperature.Evolutions;
                 var maxTemps = decodedTaf.MaximumTemperature.Evolutions;
                 Assert.AreEqual(chunk.Element.MinimumTemperatureValue, (minTemps[0].Entity as Temperature).TemperatureValue.ActualValue);
@@ -89,8 +90,8 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         }
         public static List<EvolutionChunkDecoderTester> Chunks => new List<EvolutionChunkDecoderTester>()
         {
-            // common cases
             new EvolutionChunkDecoderTester() {
+                Description = "1. Common cases",
                 Strict = true,
                 Base = "TAF KJFK 080500Z 0806/0910 23010KT 6 1/4SM BKN020",
                 EvoChunk = "BECMG 0807/0810 23024KT P6SM +SHRA BKN025 TX08/0910Z TNM01/0904",
@@ -118,9 +119,9 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                 }
             },
 
-            // line starting with PROB
             new EvolutionChunkDecoderTester()
             {
+                Description = "2. Line starting with PROB",
                 Strict = true,
                 Base = "TAF KJFK 080500Z 0806/0910 23010KT 6 1/4SM BKN020",
                 EvoChunk = "PROB40 TEMPO 0807/0810 23024KT CAVOK BKN025",
@@ -148,9 +149,9 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                 }
             },
 
-            /// embedded evolutions
             new EvolutionChunkDecoderTester()
             {
+                Description = "3. Embedded evolutions",
                 Strict = true,
                 Base = "TAF KJFK 080500Z 0806/0910 23010KT",
                 EvoChunk = "BECMG 0807/0810 23024KT CAVOK -RA PROB40 TEMPO 0808/0809 18020KT",
@@ -178,9 +179,9 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                 }
             },
 
-            //surfaceWind and visibility entities
             new EvolutionChunkDecoderTester()
             {
+                Description = "4. SurfaceWind and visibility entities",
                 Strict = false,
                 Base = "TAF BAH KJFK 080500Z 0806/0910 TX10/0807Z TN05/0904Z",
                 EvoChunk = "BECMG 0810/0812 27010KT 4000 -RA BKN025",
@@ -208,9 +209,9 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                 }
             },
 
-            // drop a chunk that doesn't match with any decoder
             new EvolutionChunkDecoderTester()
             {
+                Description = "5. Drop a chunk that doesn't match with any decoder",
                 Strict = false,
                 Base = "TAF KJFK 081009Z 0810/0912 03017G28KT 9000 BKN020",
                 EvoChunk = "FM081100 03018G27KT 6000 -SN OVC015 PROB40 0811/0912 AAA",
@@ -238,9 +239,9 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
                 }
             },
 
-            // trigger a ChunkDecoderException
             new EvolutionChunkDecoderTester()
             {
+                Description = "6. Trigger a ChunkDecoderException",
                 Strict = true,
                 Base = "TAF KJFK 081009Z 0810/0912 03017G28KT 9000 BKN020",
                 EvoChunk = "FM081200 03018G27KT 7000 -SN OVC015 PROB40 0810/0910 BK025",
@@ -272,6 +273,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
 
     public class EvolutionChunkDecoderTester
     {
+        public string Description { get; set; }
         public bool Strict { get; set; }
         public string Base { get; set; }
         public string EvoChunk { get; set; }
@@ -285,7 +287,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
 
         public override string ToString()
         {
-            return $"{Base} ¤¤¤ {EvoChunk}";;
+            return $"{Description}"; ;
         }
     }
 

@@ -92,6 +92,12 @@ namespace csharp_taf_decoder
             public const string InvalidValuesForTheForecastPeriod = "Invalid values for the forecast period";
 
             public const string InconsistentValuesForTemperatureInformation = "Inconsistent values for temperature information";
+
+            //EvolutionChunkDecoder
+            public const string WeatherEvolutionBadFormat = BadFormatFor + "weather evolution";
+            public const string EvolutionInformationBadFormat = BadFormatFor + "evolution information";
+
+            public const string UnknownEntity = "Unknown entity: ";
         }
     }
 }

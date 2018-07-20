@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace csharp_taf_decoder.chunkdecoder
 {
-    public sealed class WeatherPhenomenonChunkDecoder : TafChunkDecoder
+    public sealed class WeatherChunkDecoder : TafChunkDecoder
     {
         public const string WeatherPhenomenonParameterName = "WeatherPhenomenons";
 
@@ -30,9 +30,8 @@ namespace csharp_taf_decoder.chunkdecoder
 
         public override Dictionary<string, object> Parse(string remainingTaf, bool withCavok = false)
         {
-            var consumed = Consume(remainingTaf);
-            var found = consumed.Value;
-            var newRemainingTaf = consumed.Key;
+            string newRemainingTaf;
+            var found = Consume(remainingTaf, out newRemainingTaf);
             var result = new Dictionary<string, object>();
 
             var weatherPhenomenons = new List<WeatherPhenomenon>();

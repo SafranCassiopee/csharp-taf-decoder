@@ -10,7 +10,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
     [TestFixture, Category("WeatherPhenomenon")]
     public class WeatherPhenomenonDecoderTest
     {
-        private static readonly WeatherPhenomenonChunkDecoder chunkDecoder = new WeatherPhenomenonChunkDecoder();
+        private static readonly WeatherChunkDecoder chunkDecoder = new WeatherChunkDecoder();
 
         /// <summary>
         /// Test parsing of valid weather chunks
@@ -21,7 +21,7 @@ namespace csharp_taf_decoder_tests.ChunkDecoder
         {
             var decoded = chunkDecoder.Parse(chunk.Chunk);
 
-            var weatherPhenomenon = (decoded[TafDecoder.ResultKey] as Dictionary<string, object>)[WeatherPhenomenonChunkDecoder.WeatherPhenomenonParameterName] as List<WeatherPhenomenon>;
+            var weatherPhenomenon = (decoded[TafDecoder.ResultKey] as Dictionary<string, object>)[WeatherChunkDecoder.WeatherPhenomenonParameterName] as List<WeatherPhenomenon>;
             for (var i = 0; i < weatherPhenomenon.Count; i++)
             {
                 Assert.AreEqual(chunk.WeatherPhenomons[i].IntensityProximity, weatherPhenomenon[i].IntensityProximity);
