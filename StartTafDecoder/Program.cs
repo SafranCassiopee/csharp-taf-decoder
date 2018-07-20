@@ -13,7 +13,7 @@ namespace StartTafDecoder
     {
         class Options
         {
-            [Option("Taf", Required = true, HelpText = "Path to the XML Configuration File.")]
+            [Option("Taf", Required = true, HelpText = "The Taf to decode")]
             public string Taf { get; set; }
 
             [HelpOption]
@@ -35,12 +35,12 @@ namespace StartTafDecoder
             }
         }
 
-        private static void Display(object o, string prefix = "")
+        private static void Display(object obj, string prefix = "")
         {
-            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(o))
+            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(obj))
             {
                 var name = descriptor.Name;
-                var value = descriptor.GetValue(o);
+                var value = descriptor.GetValue(obj);
 
                 if (value is ReadOnlyCollection<TafChunkDecoderException>)
                 {
