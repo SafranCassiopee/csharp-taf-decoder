@@ -38,21 +38,21 @@ namespace csharp_taf_decoder.chunkdecoder
 
         public string Remaining { get; private set; }
 
-        public EvolutionChunkDecoder(bool strict, bool with_cavok)
+        public EvolutionChunkDecoder(bool strict, bool withCavok)
         {
             IsStrict = strict;
-            _withCavok = with_cavok;
+            _withCavok = withCavok;
         }
 
-        public void Parse(string remaining_taf, DecodedTaf decoded_taf)
+        public void Parse(string remainingTaf, DecodedTaf decodedTaf)
         {
             string newRemainingTaf;
-            var found = Consume(remaining_taf, out newRemainingTaf);
+            var found = Consume(remainingTaf, out newRemainingTaf);
 
             if (found.Count <= 1)
             {
                 // the first chunk didn't match anything, so we remove it to avoid an infinite loop
-                Remaining = ConsumeOneChunk(remaining_taf);
+                Remaining = ConsumeOneChunk(remainingTaf);
                 return;
             }
 
@@ -82,7 +82,7 @@ namespace csharp_taf_decoder.chunkdecoder
                 evolution.FromTime = evolutionPeriod.Substring(2, 2) + ':' + evolutionPeriod.Substring(4, 2) + " UTC";
             }
 
-            remaining = ParseEntitiesChunk(evolution, remaining, decoded_taf);
+            remaining = ParseEntitiesChunk(evolution, remaining, decodedTaf);
         }
 
         /// <summary>
@@ -90,9 +90,9 @@ namespace csharp_taf_decoder.chunkdecoder
         /// </summary>
         /// <param name="evolution"></param>
         /// <param name="remaining"></param>
-        /// <param name="decoded_taf"></param>
+        /// <param name="decodedTaf"></param>
         /// <returns></returns>
-        private string ParseEntitiesChunk(Evolution evolution, string chunk, DecodedTaf decoded_taf)
+        private string ParseEntitiesChunk(Evolution evolution, string chunk, DecodedTaf decodedTaf)
         {
             // For each value we detect, we'll clone the evolution object, complete the clone,
             // and add it to the corresponding entity of the decoded taf
@@ -106,7 +106,7 @@ namespace csharp_taf_decoder.chunkdecoder
                 try
                 {
                     // we check for probability in each loop, as it can be anywhere
-                    remainingEvolutions = ProbabilityChunkDecoder(evolution, remainingEvolutions, decoded_taf);
+                    remainingEvolutions = ProbabilityChunkDecoder(evolution, remainingEvolutions, decodedTaf);
 
                     // reset cavok
                     _withCavok = false;
@@ -134,12 +134,12 @@ namespace csharp_taf_decoder.chunkdecoder
                     }
                     if (entityName == TemperatureChunkDecoder.MaximumTemperatureParameterName || entityName == TemperatureChunkDecoder.MinimumTemperatureParameterName)
                     {
-                        AddEvolution(decoded_taf, evolution, result, TemperatureChunkDecoder.MaximumTemperatureParameterName);
-                        AddEvolution(decoded_taf, evolution, result, TemperatureChunkDecoder.MinimumTemperatureParameterName);
+                        AddEvolution(decodedTaf, evolution, result, TemperatureChunkDecoder.MaximumTemperatureParameterName);
+                        AddEvolution(decodedTaf, evolution, result, TemperatureChunkDecoder.MinimumTemperatureParameterName);
                     }
                     else
                     {
-                        AddEvolution(decoded_taf, evolution, result, entityName);
+                        AddEvolution(decodedTaf, evolution, result, entityName);
                     }
 
                     // update remaining evo for the next round
@@ -165,7 +165,7 @@ namespace csharp_taf_decoder.chunkdecoder
             return remainingEvolutions;
         }
 
-        private void AddEvolution(DecodedTaf decoded_taf, Evolution evolution, Dictionary<string, object> result, string entityName)
+        private void AddEvolution(DecodedTaf decodedTaf, Evolution evolution, Dictionary<string, object> result, string entityName)
         {
             // clone the evolution entity
             var newEvolution = evolution.Clone() as Evolution;
@@ -179,7 +179,7 @@ namespace csharp_taf_decoder.chunkdecoder
             }
 
             // get the original entity from the decoded taf or a new one decoded taf doesn't contain it yet
-            var decodedEntity = typeof(DecodedTaf).GetProperty(entityName).GetValue(decoded_taf) as AbstractEntity;
+            var decodedEntity = typeof(DecodedTaf).GetProperty(entityName).GetValue(decodedTaf) as AbstractEntity;
 
             if (decodedEntity == null || entityName == CloudChunkDecoder.CloudsParameterName || entityName == WeatherChunkDecoder.WeatherPhenomenonParameterName)
             {
@@ -194,22 +194,22 @@ namespace csharp_taf_decoder.chunkdecoder
             switch (entityName)
             {
                 case CloudChunkDecoder.CloudsParameterName:
-                    decoded_taf.Clouds.Add(decodedEntity as CloudLayer);
+                    decodedTaf.Clouds.Add(decodedEntity as CloudLayer);
                     break;
                 case WeatherChunkDecoder.WeatherPhenomenonParameterName:
-                    decoded_taf.WeatherPhenomenons.Add(decodedEntity as WeatherPhenomenon);
+                    decodedTaf.WeatherPhenomenons.Add(decodedEntity as WeatherPhenomenon);
                     break;
                 case VisibilityChunkDecoder.VisibilityParameterName:
-                    decoded_taf.Visibility = decodedEntity as Visibility;
+                    decodedTaf.Visibility = decodedEntity as Visibility;
                     break;
                 case SurfaceWindChunkDecoder.SurfaceWindParameterName:
-                    decoded_taf.SurfaceWind = decodedEntity as SurfaceWind;
+                    decodedTaf.SurfaceWind = decodedEntity as SurfaceWind;
                     break;
                 case TemperatureChunkDecoder.MaximumTemperatureParameterName:
-                    decoded_taf.MaximumTemperature = decodedEntity as Temperature;
+                    decodedTaf.MaximumTemperature = decodedEntity as Temperature;
                     break;
                 case TemperatureChunkDecoder.MinimumTemperatureParameterName:
-                    decoded_taf.MinimumTemperature = decodedEntity as Temperature;
+                    decodedTaf.MinimumTemperature = decodedEntity as Temperature;
                     break;
                 default:
                     throw new TafChunkDecoderException(TafChunkDecoderException.Messages.UnknownEntity + decodedEntity.ToString());
