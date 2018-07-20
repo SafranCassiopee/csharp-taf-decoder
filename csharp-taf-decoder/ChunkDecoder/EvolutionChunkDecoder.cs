@@ -58,10 +58,9 @@ namespace csharp_taf_decoder.chunkdecoder
             var evo_period = found[2].Value.Trim();
             var remaining = found[3].Value;
 
-
             var evolution = new Evolution() { Type = evo_type };
             //php: if (strpos($result['remaining'], 'PROB') !== false) {
-            if (remaining.Contains("PROB"))
+            if (remaining.StartsWith("PROB"))
             {
                 // if the line started with PROBnn it won't have been consumed and we'll find it in remaining
                 // LDA: Je ne suis pas d'accord avec ce commentaire, ce n'est pas ce que semble faire le code PHP
@@ -129,7 +128,7 @@ namespace csharp_taf_decoder.chunkdecoder
                         }
                         entity_name = VisibilityChunkDecoder.VisibilityParameterName;
                     }
-                    var entity = result[entity_name];
+                    var entity = result.Count > 0 ? result[entity_name] : null;
 
                     if (entity == null && entity_name != VisibilityChunkDecoder.VisibilityParameterName)
                     {
@@ -262,16 +261,16 @@ namespace csharp_taf_decoder.chunkdecoder
                 return chunk;
             }
 
-            var prob = found[1].Value.Trim();
-            var type = found[2].Value.Trim();
-            var period = found[3].Value.Trim();
-            var remaining = found[4].Value.Trim();
+            var prob = found[0].Groups[1].Value.Trim();
+            var type = found[0].Groups[2].Value.Trim();
+            var period = found[0].Groups[3].Value.Trim();
+            var remaining = found[0].Groups[4].Value.Trim();
 
-            if (prob.Contains("PROB"))
+            if (prob.StartsWith("PROB"))
             {
                 // LDA: même problèmatique
                 evolution.Probability = prob;
-                var embeddedEvolution = new Evolution() { Type = string.IsNullOrEmpty(type) ? type : ProbabilityParameterName };
+                var embeddedEvolution = new Evolution() { Type = !string.IsNullOrEmpty(type) ? type : ProbabilityParameterName };
 
                 var periodArr = period.Split('/');
                 embeddedEvolution.FromDay = Convert.ToInt32(periodArr[0].Substring(0, 2));

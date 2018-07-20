@@ -44,7 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChunkDecoder\EvolutionChunkDecoder.cs" />
-    <Compile Include="ChunkDecoder\EvolutionChunkDecoderv1.cs" />
     <Compile Include="ChunkDecoder\ForecastPeriodChunkDecoder.cs" />
     <Compile Include="ChunkDecoder\WeatherChunkDecoder.cs" />
     <Compile Include="Cloner.cs" />
