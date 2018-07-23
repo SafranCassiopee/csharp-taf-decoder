@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 
-namespace csharp_metar_decoder_tests
+namespace csharp_taf_decoder_tests
 {
     [TestFixture, Category("Entity")]
     public class ValueTest
