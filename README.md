@@ -1,6 +1,6 @@
 C# TAF decoder
 =================
-[![Build status](https://ci.appveyor.com/api/projects/status/6bn4b15le3pj5wdt/branch/master?svg=true)](https://ci.appveyor.com/project/SafranCassiopee/csharp-taf-decoder/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/45qdqb31sdfhk47m?svg=true)](https://ci.appveyor.com/project/SafranCassiopee/csharp-taf-decoder/branch/master)
 [![Coverage Status](https://coveralls.io/repos/github/SafranCassiopee/csharp-taf-decoder/badge.svg)](https://coveralls.io/github/SafranCassiopee/csharp-taf-decoder)
 [![Latest Stable Version NuGet](https://img.shields.io/nuget/v/csharp-taf-decoder.svg)](https://www.nuget.org/packages/csharp-taf-decoder/)
 
