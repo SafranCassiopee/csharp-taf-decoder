@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>csharp-taf-decoder</id>
+    <version>$version$</version>
+    <title>CSharp TAF Decoder</title>
+    <authors>SAFRAN Cassiopee</authors>
+    <owners>SAFRAN Cassiopee</owners>
+    <projectUrl>https://github.com/SafranCassiopee/csharp-taf-decoder</projectUrl>
+    <licenseUrl>https://raw.githubusercontent.com/SafranCassiopee/csharp-taf-decoder/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This piece of software is a library package that provides a parser to decode raw taf forecast.
+
+TAF is a format made for weather information forecast. It is predominantly used by in aviation, during flight preparation.
+Raw TAF format is highly standardized through the International Civil Aviation Organization (ICAO).
+
+*    [TAF definition on wikipedia](https://en.wikipedia.org/wiki/Terminal_aerodrome_forecast)
+*    [TAF format specification](http://www.wmo.int/pages/prog/www/WMOCodes/WMO306_vI1/VolumeI.1.html)</description>
+    <summary>This piece of software is a library package that provides a parser to decode raw TAF forecast.</summary>
+    <releaseNotes>First release.</releaseNotes>
+    <tags>taf aviation weather</tags>
+     <dependencies>
+        <group targetFramework=".NETFramework4.5">
+        </group>
+      </dependencies>
+  </metadata>
+  <files>
+    <file src="bin\Release\csharp-taf-decoder.dll" target="lib\Net45\csharp-taf-decoder.dll" />
+  </files>
+</package>
