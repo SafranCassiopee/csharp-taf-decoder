@@ -143,7 +143,7 @@ namespace csharp_taf_decoder.chunkdecoder
                     // update remaining evo for the next round
                     remainingEvolutions = (string)decoded[TafDecoder.RemainingTafKey];
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     if (++tries == _decoderChain.Count)
                     {
